@@ -14,3 +14,4 @@
       data:
         state: "{{ state }}"
         comments: "{{ comment }}"
+    delegate_to: localhost
