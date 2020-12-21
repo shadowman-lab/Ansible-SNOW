@@ -1,0 +1,26 @@
+- name: Create an incident in ServiceNow using facts from a host
+  hosts: "{{ vm_name | default('all')}}"
+  gather_facts: false
+  connection: local
+
+  collections:
+    - servicenow.servicenow
+  
+  tasks: 
+  
+  - name: Create an incident in ServiceNow
+    snow_record:
+      state: present
+      data:
+        short_description: "{{ incident_description }}"
+        caller_id: "System Administrator"
+        urgency: "{{ sn_urgency }}"
+        impact: "{{ sn_impact }}"
+        u_operating_system: "{{ os_type | default(omit) }}"
+        u_ip_address: "{{ ansible_host | default(omit) }}"
+        u_vm_name: "{{ inventory_hostname | default(omit) }}"
+        description: "{{ sn_description | default(omit) }}"
+    register: new_incident
+
+  - debug: 
+      var: new_incident.record.number

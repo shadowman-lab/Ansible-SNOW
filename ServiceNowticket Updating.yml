@@ -1,0 +1,16 @@
+- name: Update a ticket in ServiceNow
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  collections:
+    - servicenow.servicenow
+  
+  tasks: 
+  - name: Update an incident in ServiceNow
+    snow_record:
+      state: present
+      number: "{{ ticket_number }}"
+      data:
+        state: "{{ state }}"
+        comments: "{{ comment }}"

@@ -1,0 +1,18 @@
+- name: Update a catalog item in ServiceNow
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  collections:
+    - servicenow.servicenow
+  
+  tasks: 
+  - name: Update a catalog work notes and state in ServiceNow
+    snow_record:
+      state: present
+      number: "{{ ticket_number }}"
+      table: sc_request
+      data:
+        request_state: "{{ request_state | default(omit) }}"
+        work_notes: "{{ work_notes }}"
+    when: ticket_number != ''
