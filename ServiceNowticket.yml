@@ -9,7 +9,7 @@
   tasks: 
   
   - name: Create an incident in ServiceNow
-    snow_record:
+    servicenow.servicenow.snow_record:
       state: present
       data:
         short_description: "{{ incident_description }}"

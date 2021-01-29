@@ -8,7 +8,7 @@
   
   tasks: 
   - name: Update a catalog work notes and state in ServiceNow
-    snow_record:
+    servicenow.servicenow.snow_record:
       state: present
       number: "{{ ticket_number }}"
       table: sc_request

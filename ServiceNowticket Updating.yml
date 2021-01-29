@@ -8,7 +8,7 @@
   
   tasks: 
   - name: Update an incident in ServiceNow
-    snow_record:
+    servicenow.servicenow.snow_record:
       state: present
       number: "{{ ticket_number }}"
       data:
