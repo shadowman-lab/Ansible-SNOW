@@ -1,0 +1,24 @@
+- name: Create an incident in ServiceNow for IP Blocking
+  hosts: "{{ vm_name | default('all')}}"
+  gather_facts: false
+  connection: local
+
+  collections:
+    - servicenow.servicenow
+  
+  tasks: 
+  
+  - name: Create an incident in ServiceNow
+    servicenow.servicenow.snow_record:
+      state: present
+      data:
+        short_description: "Ansible Tower IP Block"
+        caller_id: "System Administrator"
+        urgency: "1 - High"
+        impact: "1 - High"
+        u_ip_address: "{{ ip_addr }}"
+    register: new_incident
+    delegate_to: localhost
+
+  - debug: 
+      var: new_incident.record.number
