@@ -11,13 +11,13 @@
   - name: Review a change request in ServiceNow
     servicenow.itsm.change_request:
       state: review
-      number: "CHG0030045"
+      number: "{{ request.number }}"
     delegate_to: localhost
   
   - name: Close a change request in ServiceNow
     servicenow.itsm.change_request:
       state: closed
-      number: "CHG0030045"
+      number: "{{ request.number }}"
       close_code: "successful"
       close_notes: "{{ notes }}"
     delegate_to: localhost
