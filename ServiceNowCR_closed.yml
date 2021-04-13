@@ -7,6 +7,12 @@
     - servicenow.itsm
   
   tasks: 
+
+  - name: Review a change request in ServiceNow
+    servicenow.itsm.change_request:
+      state: review
+      number: "CHG0030045"
+    delegate_to: localhost
   
   - name: Close a change request in ServiceNow
     servicenow.itsm.change_request:
