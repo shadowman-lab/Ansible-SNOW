@@ -1,4 +1,4 @@
-- name: Close an incident in ServiceNow
+- name: Update an incident in ServiceNow
   hosts: all
   gather_facts: false
   connection: local
@@ -8,10 +8,10 @@
   
   tasks: 
   
-  - name: Close an incident in ServiceNow
+  - name: Update an incident in ServiceNow
     servicenow.itsm.incident:
-      state: closed
+      state: in_progress
       number: "{{ ticket_number }}"
-      close_code: "Solved (Permanently)"
-      close_nodes: "{{ comment }}"
+      other:
+        comments: "{{ comment }}"
     delegate_to: localhost

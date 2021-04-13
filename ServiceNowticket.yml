@@ -10,7 +10,7 @@
   
   - name: Create an incident in ServiceNow
     servicenow.itsm.incident:
-      state: present
+      state: new
       description: "{{ sn_description | default(omit) }}"
       short_description: "{{ incident_description }}"
       caller: admin
