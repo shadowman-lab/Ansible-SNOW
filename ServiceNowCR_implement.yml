@@ -1,6 +1,6 @@
 - name: Implement a change request
   hosts: all
-  gather_facts: true
+  gather_facts: false
   connection: local
 
   collections:
@@ -13,7 +13,5 @@
       state: implement
       assignment_group: "{{ group | default(omit) }}"
       number: "CHG0030044"
-      other:
-        work_start: "{{ ansible_date_time.date }} + ' ' + {{ ansible_date_time.time }}"
     delegate_to: localhost
     
