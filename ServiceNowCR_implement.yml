@@ -10,7 +10,7 @@
   
   - name: Schedule a change request in ServiceNow
     servicenow.itsm.change_request:
-      state: schedule
+      state: scheduled
       assignment_group: "{{ group | default(omit) }}"
       number: "CHG0030045"
     delegate_to: localhost
