@@ -16,7 +16,7 @@
       short_description: "Reboot Windows Server"
       requested_by: admin
       other:
-        cmdb_ci: "{{ inventory_hostname }}"
+        cmdb_ci: "{{ ip_addr }}"
     delegate_to: localhost
     register: request
 
