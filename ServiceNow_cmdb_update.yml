@@ -14,9 +14,9 @@
       name: "{{ inventory_hostname }}"
       ip_address: "{{ ip_addr }}"
       environment: production
+      sys_class_name: cmdb_ci_server
       other:
         classification: Production
-        class: cmdb_ci_server
         fqdn: "{{ fqdn }}"
         os: "{{ os }}"
         host_name: "{{ inventory_hostname }}"
