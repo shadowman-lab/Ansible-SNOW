@@ -1,0 +1,20 @@
+- name: Close a change request
+  hosts: all
+  gather_facts: true
+  connection: local
+
+  collections:
+    - servicenow.itsm
+  
+  tasks: 
+  
+  - name: Close a change request in ServiceNow
+    servicenow.itsm.change_request:
+      state: close
+      number: "{{ request.number }}"
+      close_code: "successful"
+      close_notes: "{{ notes }}"
+      other:
+        work_end: "{{ ansible_date_time.date }} + ' ' + {{ ansible_date_time.time }}"
+    delegate_to: localhost
+    

@@ -1,0 +1,26 @@
+- name: Create a change request
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  collections:
+    - servicenow.itsm
+  
+  tasks: 
+  
+  - name: Create a change request in ServiceNow
+    servicenow.itsm.change_request:
+      state: new
+      type: standard
+      template: "Reboot Windows Server"
+      requested_by: admin
+      other:
+        cmdb_ci: "{{ inventory_hostname }}"
+    delegate_to: localhost
+    register: request
+
+  - name: Pass along request information
+    set_stats:
+      data:
+        request: "{{ request }}"
+      per_host: no

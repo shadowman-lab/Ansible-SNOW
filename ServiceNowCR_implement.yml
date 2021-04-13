@@ -1,0 +1,19 @@
+- name: Implement a change request
+  hosts: all
+  gather_facts: true
+  connection: local
+
+  collections:
+    - servicenow.itsm
+  
+  tasks: 
+  
+  - name: Implement a change request in ServiceNow
+    servicenow.itsm.change_request:
+      state: implement
+      assignment_group: "{{ group | default(omit) }}"
+      number: "{{ request.number }}"
+      other:
+        work_start: "{{ ansible_date_time.date }} + ' ' + {{ ansible_date_time.time }}"
+    delegate_to: localhost
+    
