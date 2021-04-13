@@ -1,6 +1,6 @@
 - name: Close a change request
   hosts: localhost
-  gather_facts: true
+  gather_facts: false
   connection: local
 
   collections:
