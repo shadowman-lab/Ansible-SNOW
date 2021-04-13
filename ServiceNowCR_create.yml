@@ -23,5 +23,5 @@
   - name: Pass along request information
     set_stats:
       data:
-        request: "{{ request }}"
+        request: "{{ request.record }}"
       per_host: no
