@@ -13,5 +13,5 @@
       state: closed
       number: "{{ ticket_number }}"
       close_code: "Solved (Permanently)"
-      close_nodes: "{{ comment }}"
+      close_notes: "{{ comment }}"
     delegate_to: localhost
