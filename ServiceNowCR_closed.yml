@@ -11,7 +11,7 @@
   - name: Close a change request in ServiceNow
     servicenow.itsm.change_request:
       state: close
-      number: "CHG0030044"
+      number: "CHG0030045"
       close_code: "successful"
       close_notes: "{{ notes }}"
       other:

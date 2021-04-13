@@ -8,10 +8,10 @@
   
   tasks: 
   
-  - name: Implement a change request in ServiceNow
+  - name: Schedule a change request in ServiceNow
     servicenow.itsm.change_request:
-      state: implement
+      state: schedule
       assignment_group: "{{ group | default(omit) }}"
-      number: "CHG0030044"
+      number: "CHG0030045"
     delegate_to: localhost
     
