@@ -10,14 +10,13 @@
   
   - name: Create an incident in ServiceNow
     servicenow.itsm.incident:
-      state: present
-      data:
-        short_description: "Ansible Tower IP Block"
-        caller: admin
-        urgency: high
-        impact: high
-        other:
-          u_ip_address: "{{ ip_addr }}"
+      state: new
+      short_description: "Ansible Tower IP Block"
+      caller: admin
+      urgency: high
+      impact: high
+      other:
+        u_ip_address: "{{ ip_addr }}"
     register: new_incident
 
   - debug: 
