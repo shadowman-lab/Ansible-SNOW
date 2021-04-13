@@ -1,0 +1,23 @@
+- name: Update CMDB table
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  collections:
+    - servicenow.itsm
+  
+  tasks: 
+  
+  - name: Update SNOW CMDB
+    servicenow.itsm.configuration_item:
+      state: "{{ status }}"
+      name: "{{ inventory_hostname }}"
+      fqdn: "{{ fqdn }}"
+      host_name: "{{ inventory_hostname }}"
+      ip_address: "{{ ip_addr }}"
+      class: cmdb_ci_server
+      os: "{{ os }}"
+      environment: production
+      other:
+        classification: Production
+    delegate_to: localhost
