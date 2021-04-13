@@ -12,12 +12,12 @@
     servicenow.itsm.change_request:
       state: scheduled
       assignment_group: "{{ group | default(omit) }}"
-      number: "{{ request.number }}"
+      number: "{{ request.record.number }}"
     delegate_to: localhost
 
   - name: Update to implement a change request in ServiceNow
     servicenow.itsm.change_request:
       state: implement
-      number: "{{ request.number }}"
+      number: "{{ request.record.number }}"
     delegate_to: localhost
     
