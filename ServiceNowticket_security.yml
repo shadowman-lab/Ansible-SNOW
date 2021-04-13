@@ -4,19 +4,20 @@
   connection: local
 
   collections:
-    - servicenow.servicenow
+    - servicenow.itsm
   
   tasks: 
   
   - name: Create an incident in ServiceNow
-    servicenow.servicenow.snow_record:
+    servicenow.itsm.incident:
       state: present
       data:
         short_description: "Ansible Tower IP Block"
-        caller_id: "System Administrator"
-        urgency: "1 - High"
-        impact: "1 - High"
-        u_ip_address: "{{ ip_addr }}"
+        caller: admin
+        urgency: high
+        impact: high
+        other:
+          u_ip_address: "{{ ip_addr }}"
     register: new_incident
 
   - debug: 

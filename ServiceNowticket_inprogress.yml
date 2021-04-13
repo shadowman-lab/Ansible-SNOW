@@ -1,0 +1,17 @@
+- name: Close an incident in ServiceNow
+  hosts: all
+  gather_facts: false
+  connection: local
+
+  collections:
+    - servicenow.itsm
+  
+  tasks: 
+  
+  - name: Close an incident in ServiceNow
+    servicenow.itsm.incident:
+      state: closed
+      number: "{{ ticket_number }}"
+      close_code: "Solved (Permanently)"
+      close_nodes: "{{ comment }}"
+    delegate_to: localhost

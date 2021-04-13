@@ -4,22 +4,22 @@
   connection: local
 
   collections:
-    - servicenow.servicenow
+    - servicenow.itsm
   
   tasks: 
   
   - name: Create an incident in ServiceNow
-    servicenow.servicenow.snow_record:
+    servicenow.itsm.incident:
       state: present
-      data:
-        short_description: "{{ incident_description }}"
-        caller_id: "System Administrator"
-        urgency: "{{ sn_urgency }}"
-        impact: "{{ sn_impact }}"
+      description: "{{ sn_description | default(omit) }}"
+      short_description: "{{ incident_description }}"
+      caller: admin
+      urgency: "{{ sn_urgency }}"
+      impact: "{{ sn_impact }}"
+      other:
         u_operating_system: "{{ os | default(omit) }}"
-        u_ip_address: "{{ ansible_host | default(omit) }}"
-        u_vm_name: "{{ inventory_hostname | default(omit) }}"
-        description: "{{ sn_description | default(omit) }}"
+        u_ip_address: "{{ ip_addr | default(omit) }}"
+        u_vm_name: "{{ inventory_hostname | default(omit) }}"       
     register: new_incident
     delegate_to: localhost
 
