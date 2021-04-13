@@ -12,7 +12,7 @@
     servicenow.itsm.change_request:
       state: new
       type: standard
-      template: "Reboot Windows Server"
+      template: "Reboot Windows Server - 1"
       requested_by: admin
       other:
         cmdb_ci: "{{ inventory_hostname }}"
