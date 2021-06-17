@@ -23,5 +23,5 @@
     register: new_incident
     delegate_to: localhost
 
-  - debug: 
+  - ansible.builtin.debug: 
       var: new_incident.record.number

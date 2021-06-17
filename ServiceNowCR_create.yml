@@ -21,7 +21,7 @@
     register: request
 
   - name: Pass along request information
-    set_stats:
+    ansible.builtin.set_stats:
       data:
         request: "{{ request }}"
       per_host: no

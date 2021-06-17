@@ -19,5 +19,5 @@
         u_ip_address: "{{ ip_addr }}"
     register: new_incident
 
-  - debug: 
+  - ansible.builtin.debug: 
       var: new_incident.record.number
