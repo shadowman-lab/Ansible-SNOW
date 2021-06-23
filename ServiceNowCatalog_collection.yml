@@ -17,3 +17,4 @@
         work_notes: "{{ work_notes }}"
     when: ticket_number != ''
     delegate_to: aap.shadowman.dev
+    delegate_facts: true
