@@ -11,6 +11,9 @@
       state: present
       number: "{{ ticket_number }}"
       table: sc_request
+      instance: "{{ lookup('env', 'SN_INSTANCE') }}"
+      username: "{{ lookup('env', 'SN_USERNAME') }}"
+      password: "{{ lookup('env', 'SN_PASSWORD') }}"
       data:
         request_state: "{{ request_state | default(omit) }}"
         work_notes: "{{ work_notes }}"
