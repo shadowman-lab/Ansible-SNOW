@@ -10,6 +10,7 @@
     servicenow.servicenow.snow_record:
       state: present
       number: "{{ ticket_number }}"
+      instance: "{{ SN_INSTANCE }}"
       table: sc_request
       data:
         request_state: "{{ request_state | default(omit) }}"
