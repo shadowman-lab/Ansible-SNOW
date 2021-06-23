@@ -1,7 +1,6 @@
 - name: Update a catalog item in ServiceNow
   hosts: all
   gather_facts: no
-  connection: local
 
   collections:
     - servicenow.servicenow
