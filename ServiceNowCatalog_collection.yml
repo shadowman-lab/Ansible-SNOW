@@ -18,4 +18,3 @@
         request_state: "{{ request_state | default(omit) }}"
         work_notes: "{{ work_notes }}"
     when: ticket_number != ''
-    delegate_to: aap.shadowman.dev
