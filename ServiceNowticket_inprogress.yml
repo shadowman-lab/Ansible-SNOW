@@ -7,4 +7,4 @@
     servicenow_ticket: "update"
 
   roles:
-    - servicenow_update
+    - servicenow_ticket

@@ -10,4 +10,4 @@
     servicenow_ticket: "create"
  
   roles:
-    - servicenow_create
+    - servicenow_ticket

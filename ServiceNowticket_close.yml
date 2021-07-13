@@ -7,4 +7,4 @@
     servicenow_ticket: "close"
 
   roles:
-    - servicenow_close
+    - servicenow_ticket
