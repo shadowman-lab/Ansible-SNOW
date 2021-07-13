@@ -3,22 +3,8 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
+  vars:
+    servicenow_cr: "close"
   
-  tasks: 
-
-  - name: Review a change request in ServiceNow
-    servicenow.itsm.change_request:
-      state: review
-      number: "{{ request.record.number }}"
-    delegate_to: localhost
-  
-  - name: Close a change request in ServiceNow
-    servicenow.itsm.change_request:
-      state: closed
-      number: "{{ request.record.number }}"
-      close_code: "successful"
-      close_notes: "{{ notes }}"
-    delegate_to: localhost
-    
+  roles:
+    - servicenow_change_request

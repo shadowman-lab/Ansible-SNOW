@@ -1,0 +1,11 @@
+---
+- name: Update a catalog work notes and state in ServiceNow
+  servicenow.servicenow.snow_record:
+    state: present
+    number: "{{ ticket_number }}"
+    table: sc_request
+    data:
+      request_state: "{{ request_state | default(omit) }}"
+      work_notes: "{{ work_notes }}"
+  when: ticket_number != ''
+  delegate_to: localhost

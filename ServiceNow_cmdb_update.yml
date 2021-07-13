@@ -3,22 +3,5 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
-  
-  tasks: 
-  
-  - name: Update SNOW CMDB
-    servicenow.itsm.configuration_item:
-      state: "{{ status }}"
-      name: "{{ inventory_hostname }}"
-      ip_address: "{{ ip_addr | default(omit) }}"
-      environment: production
-      sys_class_name: cmdb_ci_server
-      sys_id: "{{ sys_id | default(omit) }}"
-      other:
-        classification: Production
-        fqdn: "{{ fqdn }}"
-        os: "{{ os }}"
-        host_name: "{{ inventory_hostname }}"
-    delegate_to: localhost
+  roles:
+    - servicenow_cmdb

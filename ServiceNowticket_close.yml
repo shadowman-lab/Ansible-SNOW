@@ -3,15 +3,8 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
-  
-  tasks: 
-  
-  - name: Close an incident in ServiceNow
-    servicenow.itsm.incident:
-      state: closed
-      number: "{{ ticket_number }}"
-      close_code: "Solved (Permanently)"
-      close_notes: "{{ comment }}"
-    delegate_to: localhost
+  vars:
+    servicenow_ticket: "close"
+
+  roles:
+    - servicenow_close

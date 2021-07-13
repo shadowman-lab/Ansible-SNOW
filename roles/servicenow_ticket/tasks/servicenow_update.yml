@@ -1,0 +1,8 @@
+---
+- name: Update an incident in ServiceNow
+  servicenow.itsm.incident:
+    state: in_progress
+    number: "{{ ticket_number }}"
+    other:
+      comments: "{{ comment }}"
+  delegate_to: localhost

@@ -1,0 +1,6 @@
+---
+- include_tasks: servicenow_catalog_old.yml
+  when: servicenow_catalog == "old"
+
+- include_tasks: servicenow_catalog_new.yml
+  when: servicenow_catalog == "new"

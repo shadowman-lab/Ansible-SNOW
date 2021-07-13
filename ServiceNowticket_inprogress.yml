@@ -3,15 +3,8 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
-  
-  tasks: 
-  
-  - name: Update an incident in ServiceNow
-    servicenow.itsm.incident:
-      state: in_progress
-      number: "{{ ticket_number }}"
-      other:
-        comments: "{{ comment }}"
-    delegate_to: localhost
+  vars:
+    servicenow_ticket: "update"
+
+  roles:
+    - servicenow_update

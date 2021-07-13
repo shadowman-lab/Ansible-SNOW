@@ -1,0 +1,9 @@
+---
+- include_tasks: servicenow_create.yml
+  when: servicenow_ticket == "create"
+
+- include_tasks: servicenow_update.yml
+  when: servicenow_ticket == "update"
+
+- include_tasks: servicenow_close.yml
+  when: servicenow_ticket == "close"

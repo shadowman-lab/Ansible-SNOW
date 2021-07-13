@@ -3,21 +3,11 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
-  
-  tasks: 
-  
-  - name: Create an incident in ServiceNow
-    servicenow.itsm.incident:
-      state: new
-      short_description: "Ansible Tower IP Block"
-      caller: admin
-      urgency: high
-      impact: high
-      other:
-        u_ip_address: "{{ ip_addr }}"
-    register: new_incident
-
-  - ansible.builtin.debug: 
-      var: new_incident.record.number
+  vars:
+    short_description: "Ansible Tower IP Block"
+    urgency: high
+    impact: high
+    servicenow_ticket: "create"
+ 
+  roles:
+    - servicenow_create

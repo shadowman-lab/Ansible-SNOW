@@ -3,25 +3,8 @@
   gather_facts: false
   connection: local
 
-  collections:
-    - servicenow.itsm
-  
-  tasks: 
-  
-  - name: Create an incident in ServiceNow
-    servicenow.itsm.incident:
-      state: new
-      description: "{{ sn_description | default(omit) }}"
-      short_description: "{{ incident_description }}"
-      caller: admin
-      urgency: "{{ sn_urgency }}"
-      impact: "{{ sn_impact }}"
-      other:
-        u_operating_system: "{{ os | default(omit) }}"
-        u_ip_address: "{{ ip_addr | default(omit) }}"
-        u_vm_name: "{{ inventory_hostname | default(omit) }}"       
-    register: new_incident
-    delegate_to: localhost
+  vars:
+    servicenow_ticket: "create"
 
-  - ansible.builtin.debug: 
-      var: new_incident.record.number
+  roles:
+    - servicenow_create
