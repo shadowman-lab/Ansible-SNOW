@@ -4,9 +4,9 @@
   connection: local
 
   vars:
-    short_description: "Ansible Tower IP Block"
-    urgency: high
-    impact: high
+    incident_description: "Ansible Tower IP Block"
+    sn_urgency: high
+    sn_impact: high
     servicenow_ticket: "create"
  
   roles:
