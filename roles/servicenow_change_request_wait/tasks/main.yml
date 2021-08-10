@@ -4,7 +4,7 @@
     state: new
     type: normal
     priority: moderate
-    risk: low
+    risk: moderate
     impact: low
     short_description: "{{ cr_description }}"
     requested_by: admin
