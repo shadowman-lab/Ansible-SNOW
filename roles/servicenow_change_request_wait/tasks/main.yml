@@ -3,7 +3,7 @@
   servicenow.itsm.change_request:
     state: assess
     type: normal
-    priorty: moderate
+    priority: moderate
     risk: low
     impact: low
     assignment_group: "CAB Approval"
