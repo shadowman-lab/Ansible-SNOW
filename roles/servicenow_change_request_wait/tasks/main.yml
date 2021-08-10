@@ -39,7 +39,7 @@
     number: "{{ request.record.number }}"
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
-  until: change_request_statuss.records[0].state == "scheduled"
+  until: change_request_status.records[0].state == "scheduled"
   retries: 50
   delay: 10
   register: change_request_status
