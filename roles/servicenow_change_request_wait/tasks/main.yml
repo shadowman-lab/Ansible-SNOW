@@ -1,18 +1,18 @@
 ---
-- name: Create a change request in ServiceNow
-  servicenow.itsm.change_request:
-    state: new
-    type: normal
-    priority: high
-    risk: moderate
-    impact: high
-    short_description: "{{ cr_description }}"
-    requested_by: admin
-    assignment_group: "CAB Approval"
-    other:
-      cab_required: "true"
+- name: Create ServiceNow Change Request
+  servicenow.servicenow.snow_record:
+    instance: "{{ lookup('env', 'SN_INSTANCE') }}"
+    username: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
+    table: change_request
+    state: present
+    data:
+      short_description: "{{ cr_description }}"
+      severity: 3
+      priority: 2
+      assignment_group: "CAB Approval"
       approval: "requested"
-  delegate_to: localhost
+      state: -4
   register: request
 
 - name: Pass along request information
@@ -36,7 +36,7 @@
 
 - name: Wait for Change Request approval
   servicenow.itsm.change_request_info:
-    number: CHG0030103
+    number: "{{ request.record.number }}"
   register: change_request_status
   delegate_to: localhost
 
