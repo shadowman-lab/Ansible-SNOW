@@ -1,0 +1,7 @@
+- name: Create and wait for approval of a change request
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  
+  roles:
+    - servicenow_change_request_wait
