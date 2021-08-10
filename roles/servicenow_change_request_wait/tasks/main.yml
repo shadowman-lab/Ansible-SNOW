@@ -1,7 +1,7 @@
 ---
 - name: Create a change request in ServiceNow
   servicenow.itsm.change_request:
-    state: assess
+    state: new
     type: normal
     priority: high
     risk: moderate
