@@ -4,4 +4,4 @@
   connection: local
   
   roles:
-    - servicenow_change_request_wait_collection
+    - servicenow_change_request_collection
