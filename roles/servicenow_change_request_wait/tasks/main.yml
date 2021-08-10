@@ -1,5 +1,5 @@
 ---
-- name: Create a change request in ServiceNow ready to approve
+- name: Create a change request in ServiceNow
   servicenow.itsm.change_request:
     state: new
     type: normal
@@ -19,6 +19,12 @@
     per_host: no
   delegate_to: localhost
 
+- name: Update to assess for approvals
+  servicenow.itsm.change_request:
+    state: assess
+    number: "{{ request.record.number }}"
+  delegate_to: localhost
+
 - name: Send Approval e-mail
   community.general.mail:
     host: "{{ EMAIL_HOST }}"
@@ -35,7 +41,7 @@
   servicenow.itsm.change_request_info:
     number: "{{ request.record.number }}"      
   register: change_request_status
-  until: change_request_status[0].state == "-2"
+  until: change_request_status.state == "-2"
   retries: 50
   delay: 10
   delegate_to: localhost
