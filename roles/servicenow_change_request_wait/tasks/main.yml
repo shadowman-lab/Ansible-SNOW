@@ -38,8 +38,6 @@
   servicenow.itsm.change_request_info:
     number: "{{ request.record.number }}"
     instance: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
-    username: "{{ lookup('env', 'SN_USERNAME') }}"
-    password: "{{ lookup('env', 'SN_PASSWORD') }}"
   register: change_request_status
   delegate_to: localhost
 
