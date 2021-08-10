@@ -4,7 +4,7 @@
     state: assess
     type: normal
     priority: high
-    risk: medium
+    risk: moderate
     impact: high
     short_description: "{{ cr_description }}"
     requested_by: admin
