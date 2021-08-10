@@ -6,7 +6,6 @@
     priority: moderate
     risk: low
     impact: low
-    assignment_group: "CAB Approval"
     short_description: "{{ cr_description }}"
     requested_by: admin
   delegate_to: localhost
@@ -23,6 +22,7 @@
   servicenow.itsm.change_request:
     state: assess
     number: "{{ request.record.number }}"
+    assignment_group: "CAB Approval"
   delegate_to: localhost
 
 - name: Send Approval e-mail
