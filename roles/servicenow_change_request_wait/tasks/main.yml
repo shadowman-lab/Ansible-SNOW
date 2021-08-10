@@ -11,6 +11,7 @@
     assignment_group: "CAB Approval"
     other:
       cab_required: "true"
+      approval: "requested"
   delegate_to: localhost
   register: request
 
