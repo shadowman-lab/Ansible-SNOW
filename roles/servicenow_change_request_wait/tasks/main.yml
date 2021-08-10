@@ -42,6 +42,14 @@
   register: change_request_status
   delegate_to: localhost
 
+- name: Schedule the change request in ServiceNow
+  servicenow.itsm.change_request:
+    state: scheduled
+    instance: 
+      host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+    number: "{{ request.record.number }}"
+  delegate_to: localhost
+
 - name: Update to implement the change request in ServiceNow
   servicenow.itsm.change_request:
     state: implement
