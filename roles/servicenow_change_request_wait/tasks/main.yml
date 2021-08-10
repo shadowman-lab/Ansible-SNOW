@@ -5,6 +5,8 @@
     type: normal
     priority: moderate
     risk: low
+    on_hold: yes
+    hold_reason: "Needs approval"
     impact: low
     short_description: "{{ cr_description }}"
     requested_by: admin
