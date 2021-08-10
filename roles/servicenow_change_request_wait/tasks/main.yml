@@ -1,7 +1,7 @@
 ---
 - name: Create ServiceNow Change Request
   servicenow.servicenow.snow_record:
-    host: "{{ lookup('env', 'SN_HOST') }}.service-now.com"
+    host: "dev71616"
     username: "{{ lookup('env', 'SN_USERNAME') }}"
     password: "{{ lookup('env', 'SN_PASSWORD') }}"
     table: change_request
