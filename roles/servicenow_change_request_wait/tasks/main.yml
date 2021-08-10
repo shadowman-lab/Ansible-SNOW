@@ -39,15 +39,10 @@
     number: "{{ request.record.number }}"
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+  until: change_request_statuss.record[0].state == "scheduled"
+  retries: 50
+  delay: 10
   register: change_request_status
-  delegate_to: localhost
-
-- name: Schedule the change request in ServiceNow
-  servicenow.itsm.change_request:
-    state: scheduled
-    instance: 
-      host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
-    number: "{{ request.record.number }}"
   delegate_to: localhost
 
 - name: Update to implement the change request in ServiceNow
@@ -56,4 +51,5 @@
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
     number: "{{ request.record.number }}"
+    assignment_group: "CAB Approval"
   delegate_to: localhost
