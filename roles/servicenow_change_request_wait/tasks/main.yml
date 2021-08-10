@@ -1,15 +1,16 @@
 ---
 - name: Create a change request in ServiceNow
   servicenow.itsm.change_request:
-    state: new
+    state: assess
     type: normal
     priority: moderate
-    risk: moderate
+    risk: low
     impact: low
     short_description: "{{ cr_description }}"
     requested_by: admin
+    assignment_group: "CAB Approval"
     other:
-      approval: "requested"
+      cab_required: "true"
   delegate_to: localhost
   register: request
 
@@ -36,7 +37,7 @@
   servicenow.itsm.change_request_info:
     number: "{{ request.record.number }}"      
   register: change_request_status
-
+  delegate_to: localhost
 
 - name: Schedule the change request in ServiceNow
   servicenow.itsm.change_request:
