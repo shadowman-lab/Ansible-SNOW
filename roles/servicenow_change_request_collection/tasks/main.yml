@@ -37,6 +37,8 @@
     number: "{{ request.record.number }}"
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+      username: "{{ lookup('env', 'SN_USERNAME') }}"
+      password: "{{ lookup('env', 'SN_PASSWORD') }}"
   register: change_request_status
 
 - name: Update to implement the change request in ServiceNow
@@ -44,5 +46,7 @@
     state: implement
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+      username: "{{ lookup('env', 'SN_USERNAME') }}"
+      apassword: "{{ lookup('env', 'SN_PASSWORD') }}"
     number: "{{ request.record.number }}"
     assignment_group: "CAB Approval"
