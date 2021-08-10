@@ -37,17 +37,26 @@
 - name: Wait for Change Request approval
   servicenow.itsm.change_request_info:
     number: "{{ request.record.number }}"
+    instance: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+    username: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
   register: change_request_status
   delegate_to: localhost
 
 - name: Schedule the change request in ServiceNow
   servicenow.itsm.change_request:
     state: scheduled
+    instance: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+    username: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
     number: "{{ request.record.number }}"
   delegate_to: localhost
 
 - name: Update to implement the change request in ServiceNow
   servicenow.itsm.change_request:
     state: implement
+    instance: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+    username: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
     number: "{{ request.record.number }}"
   delegate_to: localhost
