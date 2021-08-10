@@ -1,2 +1,3 @@
 ---
 servicenow_cr: "create"
+to_email: "{{ to_emails.split(',') }}"
