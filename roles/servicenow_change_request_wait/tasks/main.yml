@@ -3,11 +3,9 @@
   servicenow.itsm.change_request:
     state: assess
     type: normal
-    priority: moderate
-    risk: low
-    on_hold: yes
-    hold_reason: "Needs approval"
-    impact: low
+    priority: high
+    risk: medium
+    impact: high
     short_description: "{{ cr_description }}"
     requested_by: admin
     assignment_group: "CAB Approval"
