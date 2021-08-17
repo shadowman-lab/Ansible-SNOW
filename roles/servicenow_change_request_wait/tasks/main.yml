@@ -29,7 +29,7 @@
     password: "{{ EMAIL_PASSWORD }}"
     port: "{{ EMAIL_PORT }}"
     subject: "Approval request for ServiceNow Change Request {{ request.record.number }}"
-    body: "You have a new CR Approval request. Please click on this URL to approve: https://dev71616.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number={{ request.record.number }}"
+    body: "You have a new CR Approval request. Please click on this URL to approve: https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number={{ request.record.number }}"
     from: tower@shadowman.dev
     to: "{{ to_email }}"
   delegate_to: localhost  
