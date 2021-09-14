@@ -9,8 +9,6 @@
     risk: moderate
     impact: low
     assignment_group: "CAB Approval"
-    other:
-      approval: "requested"
     state: assess
   register: request
   delegate_to: localhost
