@@ -1,6 +1,6 @@
 ---
 - name: Create ServiceNow Change Request
-  servicenow.itsm.change_request_info:
+  servicenow.itsm.change_request:
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
     type: normal
@@ -9,6 +9,8 @@
     risk: moderate
     impact: low
     assignment_group: "CAB Approval"
+    other:
+      approval: "requested"
     state: assess
   register: request
   delegate_to: localhost
