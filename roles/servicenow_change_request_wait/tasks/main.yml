@@ -1,6 +1,6 @@
 ---
 - name: Create ServiceNow Change Request
-  servicenow.itsm.change_request_info:
+  servicenow.itsm.change_request:
     instance: 
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
     type: normal
