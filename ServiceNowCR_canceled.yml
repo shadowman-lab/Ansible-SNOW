@@ -1,0 +1,10 @@
+- name: Cancel a change request
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars:
+    servicenow_cr: "canceled"
+  
+  roles:
+    - servicenow_change_request
