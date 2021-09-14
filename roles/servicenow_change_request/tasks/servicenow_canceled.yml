@@ -1,0 +1,7 @@
+---
+- name: Cancel a change request in ServiceNow
+  servicenow.itsm.change_request:
+    state: canceled
+    number: "{{ request.record.number }}"
+  delegate_to: localhost
+  
