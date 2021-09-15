@@ -1,18 +1,15 @@
 ---
 - name: Create ServiceNow Change Request
-  servicenow.servicenow.snow_record:
-    instance: "{{ lookup('env', 'SN_INSTANCE') }}"
-    username: "{{ lookup('env', 'SN_USERNAME') }}"
-    password: "{{ lookup('env', 'SN_PASSWORD') }}"
-    table: change_request
-    state: present
-    data:
-      short_description: "{{ cr_description }}"
-      severity: 3
-      priority: 2
-      assignment_group: "CAB Approval"
-      approval: "requested"
-      state: -4
+  servicenow.itsm.change_request:
+    instance: 
+      host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
+    type: normal
+    short_description: "{{ cr_description }}"
+    priority: high
+    risk: moderate
+    impact: low
+    assignment_group: "CAB Approval"
+    state: assess
   register: request
 
 - name: Pass along request information
