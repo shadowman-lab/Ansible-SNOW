@@ -1,9 +1,0 @@
-- name: Update a catalog item in ServiceNow
-  hosts: all
-  gather_facts: no
-
-  vars:
-    servicenow_catalog: "new"
-  
-  roles:
-    - servicenow_catalog

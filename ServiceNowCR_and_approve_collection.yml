@@ -1,6 +1,0 @@
-- name: Create and wait for approval of a change request
-  hosts: all
-  gather_facts: false
-  
-  roles:
-    - servicenow_change_request_collection

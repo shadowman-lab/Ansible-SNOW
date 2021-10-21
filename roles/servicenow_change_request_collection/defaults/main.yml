@@ -1,3 +1,0 @@
----
-cr_description: Create new {{ operating_system|default('') }} server in {{ shadowman_provision_hypervisor|default('production') }}
-to_email: "{{ to_emails.split(',') }}"
