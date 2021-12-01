@@ -3,8 +3,5 @@
   gather_facts: no
   connection: local
 
-  vars:
-    servicenow_catalog: "old"
-
   roles:
     - servicenow_catalog
