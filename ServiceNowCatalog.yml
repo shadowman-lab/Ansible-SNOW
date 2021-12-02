@@ -1,7 +1,7 @@
 - name: Update a catalog item in ServiceNow
-  hosts: localhost
+  hosts: all
   gather_facts: no
-  connection: local
+  
 
   roles:
     - servicenow_catalog
