@@ -1,5 +1,5 @@
 - name: Update a catalog item in ServiceNow
-  hosts: all
+  hosts: localhost
   gather_facts: no
   
 
