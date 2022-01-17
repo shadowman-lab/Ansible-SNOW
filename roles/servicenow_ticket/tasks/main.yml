@@ -7,3 +7,6 @@
 
 - include_tasks: servicenow_close.yml
   when: servicenow_ticket == "close"
+
+- include_tasks: servicenow_find.yml
+  when: servicenow_ticket == "find"

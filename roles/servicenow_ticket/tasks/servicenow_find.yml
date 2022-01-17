@@ -1,0 +1,5 @@
+---
+- name: Find SNOW incisdent
+  servicenow.itsm.incident_info:
+    query:
+      - short_description: exporter
