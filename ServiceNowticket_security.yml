@@ -8,6 +8,6 @@
     sn_urgency: high
     sn_impact: high
     servicenow_ticket: "create"
- 
+
   roles:
     - servicenow_ticket

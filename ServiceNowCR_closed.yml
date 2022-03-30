@@ -5,6 +5,6 @@
 
   vars:
     servicenow_cr: "close"
-  
+
   roles:
     - servicenow_change_request

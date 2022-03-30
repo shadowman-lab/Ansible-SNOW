@@ -11,4 +11,3 @@
     state: implement
     number: "{{ request.record.number }}"
   delegate_to: localhost
-  

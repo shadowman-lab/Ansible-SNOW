@@ -4,4 +4,3 @@
     state: canceled
     number: "{{ request.record.number }}"
   delegate_to: localhost
-  

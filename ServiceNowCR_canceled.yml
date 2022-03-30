@@ -5,6 +5,6 @@
 
   vars:
     servicenow_cr: "canceled"
-  
+
   roles:
     - servicenow_change_request

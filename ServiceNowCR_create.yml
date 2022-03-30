@@ -5,6 +5,6 @@
 
   vars:
     servicenow_cr: "create"
-  
+
   roles:
     - servicenow_change_request

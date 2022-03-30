@@ -5,7 +5,7 @@
 
   vars:
     servicenow_cr: "implement"
-  
+
   roles:
     - servicenow_change_request
     
