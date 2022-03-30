@@ -16,4 +16,3 @@
     from: tower@shadowman.dev
     to: "{{ to_email }}"
   delegate_to: localhost
-  

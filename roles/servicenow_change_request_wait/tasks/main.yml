@@ -1,7 +1,7 @@
 ---
 - name: Create ServiceNow Change Request
   servicenow.itsm.change_request:
-    instance: 
+    instance:
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
     type: normal
     short_description: "{{ cr_description }}"
@@ -17,7 +17,7 @@
   ansible.builtin.set_stats:
     data:
       request: "{{ request }}"
-    per_host: no
+    per_host: false
   delegate_to: localhost
 
 - name: Send Approval e-mail
@@ -30,12 +30,12 @@
     body: "You have a new CR Approval request. Please click on this URL to approve: https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/nav_to.do?uri=change_request.do?sysparm_query=number={{ request.record.number }}"
     from: tower@shadowman.dev
     to: "{{ to_email }}"
-  delegate_to: localhost  
+  delegate_to: localhost
 
 - name: Wait for Change Request approval
   servicenow.itsm.change_request_info:
     number: "{{ request.record.number }}"
-    instance: 
+    instance:
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
   until: change_request_status.records[0].state == "scheduled"
   retries: 50
@@ -46,7 +46,7 @@
 - name: Update to implement the change request in ServiceNow
   servicenow.itsm.change_request:
     state: implement
-    instance: 
+    instance:
       host: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/"
     number: "{{ request.record.number }}"
     assignment_group: "CAB Approval"

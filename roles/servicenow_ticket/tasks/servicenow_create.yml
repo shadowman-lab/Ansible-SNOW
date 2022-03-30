@@ -10,9 +10,10 @@
     other:
       u_operating_system: "{{ os | default(omit) }}"
       u_ip_address: "{{ ip_addr | default(omit) }}"
-      u_vm_name: "{{ inventory_hostname | default(omit) }}"       
+      u_vm_name: "{{ inventory_hostname | default(omit) }}"
   register: new_incident
   delegate_to: localhost
 
-- ansible.builtin.debug: 
+- name: Display incident number
+  ansible.builtin.debug:
     var: new_incident.record.number

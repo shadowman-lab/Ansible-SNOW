@@ -15,4 +15,4 @@
   ansible.builtin.set_stats:
     data:
       request: "{{ request }}"
-    per_host: no
+    per_host: false
