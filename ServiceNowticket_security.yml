@@ -4,7 +4,7 @@
   connection: local
 
   vars:
-    incident_description: "Ansible Tower IP Block"
+    incident_description: "AAP IP Block"
     sn_urgency: high
     sn_impact: high
     servicenow_ticket: "create"
