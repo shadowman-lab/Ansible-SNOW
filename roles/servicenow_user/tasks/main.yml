@@ -1,7 +1,7 @@
 ---
 - name: Create ServiceNow User
   ansible.builtin.uri:
-    url: "{{ lookup('env', 'SN_INSTANCE') }}api/now/table/sys_user?sysparm_input_display_value=true"
+    url: "{{ lookup('env', 'SN_HOST') }}api/now/table/sys_user?sysparm_input_display_value=true"
     method: POST
     user: "{{ lookup('env', 'SN_USERNAME') }}"
     password: "{{ lookup('env', 'SN_PASSWORD') }}"
@@ -22,7 +22,7 @@
   
 - name: attach role to new user
   ansible.builtin.uri:
-    url: "{{ lookup('env', 'SN_INSTANCE') }}api/now/table/sys_user_has_role"
+    url: "{{ lookup('env', 'SN_HOST') }}api/now/table/sys_user_has_role"
     method: POST
     user: "{{ lookup('env', 'SN_USERNAME') }}"
     password: "{{ lookup('env', 'SN_PASSWORD') }}"
