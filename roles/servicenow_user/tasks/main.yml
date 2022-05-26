@@ -1,0 +1,38 @@
+---
+- name: Create ServiceNow User
+  ansible.builtin.uri:
+    url: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/api/now/table/sys_user?sysparm_input_display_value=true"
+    method: POST
+    user: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body:
+      user_name: "{{ snow_username }}"
+      user_password: "{{ snow_password }}"
+      first_name: "{{ first_name }}"
+      last_name: "{{ last_name }}"
+      department: IT
+      email: "{{ snow_username }}@shadowman.dev"
+      title: Shadowman
+    status_code: 201
+  register: user_create
+  
+- name: attach role to new user
+  ansible.builtin.uri:
+    url: "https://{{ lookup('env', 'SN_INSTANCE') }}.service-now.com/api/now/table/sys_user_has_role"
+    method: POST
+    user: "{{ lookup('env', 'SN_USERNAME') }}"
+    password: "{{ lookup('env', 'SN_PASSWORD') }}"
+    force_basic_auth: true
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body:
+      user: "{{ snow_username }}"
+      role: admin
+    status_code: 201
+  register: user_role
+  when: not cleanup
