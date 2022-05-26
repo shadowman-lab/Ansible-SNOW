@@ -35,4 +35,3 @@
       role: admin
     status_code: 201
   register: user_role
-  when: not cleanup
