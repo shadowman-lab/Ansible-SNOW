@@ -1,0 +1,6 @@
+---
+- name: Delete a change request in ServiceNow
+  servicenow.itsm.change_request:
+    state: absent
+    number: "{{ request.record.number }}"
+  delegate_to: localhost

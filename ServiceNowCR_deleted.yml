@@ -1,0 +1,10 @@
+- name: Delete a change request
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars:
+    servicenow_cr: "absent"
+
+  roles:
+    - servicenow_change_request
