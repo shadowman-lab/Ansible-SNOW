@@ -2,7 +2,8 @@
 # parseable: true
 # quiet: true
 # verbosity: 1
-
+exclude_paths:
+  - /github/workspace/.github/workflows/
 # use_default_rules: true
 # Load custom rules from this specific folder
 # rulesdir:
