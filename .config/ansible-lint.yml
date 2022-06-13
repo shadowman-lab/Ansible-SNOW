@@ -1,0 +1,16 @@
+---
+# parseable: true
+# quiet: true
+# verbosity: 1
+
+# use_default_rules: true
+# Load custom rules from this specific folder
+# rulesdir:
+#   - ./rule/directory/
+
+# Any rule that has the 'opt-in' tag will not be loaded unless its 'id' is
+# mentioned in the enable_list:
+# This makes the linter display but not fail for rules/tags listed below:
+warn_list:
+  - yaml
+  - git-latest
