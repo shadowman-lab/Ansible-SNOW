@@ -1,7 +1,5 @@
 collections:
 
-  - name: servicenow.servicenow
-
   - name: community.general
 
   - name: servicenow.itsm
