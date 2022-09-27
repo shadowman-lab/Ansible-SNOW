@@ -4,3 +4,14 @@
     resource: sc_request
     sysparm_query: numberSTARTSWITH{{ ticket_number }}
   register: requestresult
+  when: ticket_number != ''
+
+- name: Update a catalog work notes and state in ServiceNow
+  servicenow.itsm.api:
+    action: patch
+    resource: sc_request
+    sys_id: "{{ requestresult.record[0].sys_id }}"
+    data:
+      request_state: "{{ request_state | default(omit) }}"
+      work_notes: "{{ work_notes }}"
+  when: ticket_number != ''
