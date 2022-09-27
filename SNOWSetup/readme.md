@@ -528,19 +528,9 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 ### Ansible Engine
 - ansible version >= 2.9
 
-### Python libraries in the execution environment
-
-```bash
-pysnow
-netaddr
-
-```
-These python packages must be installed in the AAP execution environment that is used to run playbooks that communicate with ServiceNow.
-
 ### Collections
 
 ```bash
-servicenow.servicenow
 servicenow.itsm
 ```
 
@@ -549,8 +539,7 @@ Or if using AAP and want to attach it to a project, create a file at **collectio
 ```bash
 collections:
 
-  - name: servicenow.servicenow
-    source: https://galaxy.ansible.com
+  - name: servicenow.itsm
 ```
 
 This collection will be required when running >Ansible 2.10
@@ -561,43 +550,6 @@ Creating a custom credential in AAP will allow you to pass in your ServiceNow in
 
 #### 1)
 In AAP, navigate to **Credential Types** on the left side of the screen. Click the **Blue Add Button** on the top, which will present you with a New Credential Type dialog screen. Fill in the following fields:
-| Parameter | Value |
-|-----|-----|
-| Name  |  `ServiceNow Credential`  |
-| Description | Description of your credential type |
-
-Input Configuration
-
-```
-fields:
-  - id: instance
-    type: string
-    label: Instance
-  - id: username
-    type: string
-    label: Username
-  - id: password
-    type: string
-    label: Password
-    secret: true
-required:
-  - instance
-  - username
-  - password
-```
-
-Injector Configuration
-
-
-```
-env:
-  SN_INSTANCE: '{{instance}}'
-  SN_PASSWORD: '{{password}}'
-  SN_USERNAME: '{{username}}'
-```
-
-<img src="images/credtype.png" alt="AAP Credential Type" title="AAP Credential Type" width="1000" />
-
 | Parameter | Value |
 |-----|-----|
 | Name  |  `ServiceNow ITSM Credential`  |
@@ -636,21 +588,6 @@ env:
 <img src="images/itsmcredtype.png" alt="AAP Credential Type ITSM" title="AAP Credential Type ITSM" width="1000" />
 
 #### 2) Create your ServiceNow Credential
-
-In AAP, navigate to **Credentials** on the left side of the screen. Click the **Blue Add Button** on the right, which will present you with a New Credential dialog screen. Fill in the following fields:
-
-
-| Parameter | Value |
-|-----|-----|
-| Name | `ServiceNow Credential` |
-| Description | Description of your credential |
-| Organization |  `Default` |
-| Credential Type | `ServiceNow Credential` |
-| Instance | `<snow_instance_id> from URL before .service-now.com` |
-| Username | `SNOW Username` |
-| Password | `SNOW Password` |
-
-<img src="images/cred.png" alt="AAP Credential" title="AAP Credential" width="1000" />
 
 | Parameter | Value |
 |-----|-----|
@@ -703,21 +640,27 @@ Congratulations! You can now have AAP reach out to SNOW to query and update reco
 ## Update a ServiceNow catalog request using the ID passed from SNOW
 ```
 - name: Update a catalog item in ServiceNow
-  hosts: all
+  hosts: localhost
   gather_facts: no
-  connection: local
   
   tasks: 
+  
+  - name: Retrieve catalog request sysid
+    servicenow.itsm.api_info:
+      resource: sc_request
+      sysparm_query: numberSTARTSWITH{{ ticket_number }}
+    register: requestresult
+    when: ticket_number != ''
+
   - name: Update a catalog work notes and state in ServiceNow
-    servicenow.servicenow.snow_record:
-      state: present
-      number: "{{ ticket_number }}"
-      table: sc_request
+    servicenow.itsm.api:
+      action: patch
+      resource: sc_request
+      sys_id: "{{ requestresult.record[0].sys_id }}"
       data:
         request_state: "{{ request_state | default(omit) }}"
         work_notes: "{{ work_notes }}"
-    delegate_to: localhost
-    
+    when: ticket_number != '' 
 ```
 
 ## Have AAP use ServiceNow as an inventory source
