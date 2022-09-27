@@ -2,7 +2,7 @@
 - name: Create ServiceNow User
   servicenow.itsm.api:
     action: post
-    resource: sys_user
+    resource: sys_user?sysparm_input_display_value=true
     data:
       user_name: "{{ snow_username }}"
       user_password: "{{ snow_password }}"
