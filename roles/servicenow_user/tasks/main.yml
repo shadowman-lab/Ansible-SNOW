@@ -5,7 +5,7 @@
     resource: sys_user
     data:
       user_name: "{{ snow_username }}"
-      user_password: "{{ snow_password }}"
+      user_password: "{{ snow_password | password_hash('sha256') }}"
       first_name: "{{ first_name }}"
       last_name: "{{ last_name }}"
       department: IT
