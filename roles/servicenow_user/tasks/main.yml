@@ -1,15 +1,9 @@
 ---
 - name: Create ServiceNow User
-  ansible.builtin.uri:
-    url: "{{ lookup('env', 'SN_HOST') }}api/now/table/sys_user?sysparm_input_display_value=true"
-    method: POST
-    user: "{{ lookup('env', 'SN_USERNAME') }}"
-    password: "{{ lookup('env', 'SN_PASSWORD') }}"
-    force_basic_auth: true
-    headers:
-      Content-Type: application/json
-    body_format: json
-    body:
+  servicenow.itsm.api:
+    action: post
+    resource: sys_user
+    data:
       user_name: "{{ snow_username }}"
       user_password: "{{ snow_password }}"
       first_name: "{{ first_name }}"
@@ -17,8 +11,7 @@
       department: IT
       email: "{{ snow_username }}@shadowman.dev"
       title: Shadowman
-    status_code: 201
-  register: user_create
+      sysparm_input_display_value: true
 
 - name: Attach role to new user
   servicenow.itsm.api:
