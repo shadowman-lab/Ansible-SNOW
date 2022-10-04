@@ -1,12 +1,16 @@
 ---
-- include_tasks: servicenow_create.yml
+- name: Create ticket
+  ansible.builtin.include_tasks: servicenow_create.yml
   when: servicenow_ticket == "create"
 
-- include_tasks: servicenow_update.yml
+- name: Update ticket
+  ansible.builtin.include_tasks: servicenow_update.yml
   when: servicenow_ticket == "update"
 
-- include_tasks: servicenow_close.yml
+- name: Close ticket
+  ansible.builtin.include_tasks: servicenow_close.yml
   when: servicenow_ticket == "close"
 
-- include_tasks: servicenow_find.yml
+- name: Find ticket information
+  ansible.builtin.include_tasks: servicenow_find.yml
   when: servicenow_ticket == "find"

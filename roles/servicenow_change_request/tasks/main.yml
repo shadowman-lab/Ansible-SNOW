@@ -1,15 +1,20 @@
 ---
-- include_tasks: servicenow_create.yml
+- name: Create CR
+  ansible.builtin.include_tasks: servicenow_create.yml
   when: servicenow_cr == "create"
 
-- include_tasks: servicenow_implement.yml
+- name: Implement CR
+  ansible.builtin.include_tasks: servicenow_implement.yml
   when: servicenow_cr == "implement"
 
-- include_tasks: servicenow_close.yml
+- name: Close CR
+  ansible.builtin.include_tasks: servicenow_close.yml
   when: servicenow_cr == "close"
 
-- include_tasks: servicenow_canceled.yml
+- name: Cancel CR
+  ansible.builtin.include_tasks: servicenow_canceled.yml
   when: servicenow_cr == "canceled"
 
-- include_tasks: servicenow_deleted.yml
+- name: Delete CR
+  ansible.builtin.include_tasks: servicenow_deleted.yml
   when: servicenow_cr == "absent"
