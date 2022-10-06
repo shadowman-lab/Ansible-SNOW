@@ -738,7 +738,7 @@ In AAP, navigate to **Credentials** on the left side of the screen. Click the **
 
 #### 3) Inventory yml file
 
-Create a playbook in your repo utilzing your new Ansible collection. Note, the instance field does require the full domain name at this time. Name the file now.yml or now.yaml. You can adjust the selection order, fields, compose, and keyed_groups per the documenation https://github.com/ServiceNowITOM/servicenow-ansible/blob/devel/docs/inventory.md
+Create a playbook in your repo utilzing your new Ansible collection. Note, the instance field does require the full domain name at this time. Name the file now.yml or now.yaml. You can adjust the selection order, fields, compose, and keyed_groups per the documenation https://github.com/ansible-collections/servicenow.itsm/blob/main/docs/servicenow.itsm.now_inventory.rst
 ```
 # now.yml
 plugin: servicenow.itsm.now
