@@ -4,12 +4,11 @@
     state: "{{ status }}"
     name: "{{ inventory_hostname }}"
     ip_address: "{{ ip_addr | default(omit) }}"
-    environment: production
     sys_class_name: cmdb_ci_server
     sys_id: "{{ sys_id | default(omit) }}"
     other:
-      classification: Production
-      fqdn: "{{ fqdn }}"
-      os: "{{ os }}"
+      classification: "{{ env | default(omit) }}"
+      fqdn: "{{ fqdn | default(omit) }}"
+      os: "{{ os | default(omit) }}"
       host_name: "{{ inventory_hostname }}"
   delegate_to: localhost
