@@ -1,5 +1,5 @@
 - name: Update CMDB table
-  hosts: all
+  hosts: "{{ vm_name | default('all') }}"
   gather_facts: false
   connection: local
 
