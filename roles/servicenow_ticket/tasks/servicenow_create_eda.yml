@@ -1,0 +1,24 @@
+---
+- name: Create an incident in ServiceNow
+  servicenow.itsm.incident:
+    state: new
+    description: "{{ sn_description | default(omit) }}"
+    short_description: "{{ incident_description }}"
+    caller: admin
+    urgency: "{{ sn_urgency }}"
+    impact: "{{ sn_impact }}"
+    other:
+      u_operating_system: "{{ os | default(omit) }}"
+      u_ip_address: "{{ ip_addr | default(omit) }}"
+      u_vm_name: "{{ inventory_hostname | default(omit) }}"
+  register: new_incident
+  delegate_to: localhost
+
+- name: Display incident number
+  ansible.builtin.debug:
+    var: new_incident.record.number
+
+- name: Pass incident number
+  ansible.builtin.set_stats:
+    data:
+      ticket_number: new_incident.record.number

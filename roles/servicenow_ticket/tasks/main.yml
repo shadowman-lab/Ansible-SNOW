@@ -3,6 +3,10 @@
   ansible.builtin.include_tasks: servicenow_create.yml
   when: servicenow_ticket == "create"
 
+- name: Create ticket from EDA
+  ansible.builtin.include_tasks: servicenow_create_eda.yml
+  when: servicenow_ticket == "createeda"
+
 - name: Update ticket
   ansible.builtin.include_tasks: servicenow_update.yml
   when: servicenow_ticket == "update"

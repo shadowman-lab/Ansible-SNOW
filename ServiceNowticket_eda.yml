@@ -1,0 +1,10 @@
+- name: Create an incident in ServiceNow from EDA
+  hosts: "{{ vm_name | default('all')}}"
+  gather_facts: false
+  connection: local
+
+  vars:
+    servicenow_ticket: "createeda"
+
+  roles:
+    - servicenow_ticket
