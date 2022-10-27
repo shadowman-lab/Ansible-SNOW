@@ -21,4 +21,4 @@
 - name: Pass incident number
   ansible.builtin.set_stats:
     data:
-      ticket_number: new_incident.record.number
+      ticket_number: "{{ new_incident.record.number }}"
