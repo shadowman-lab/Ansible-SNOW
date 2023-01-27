@@ -14,4 +14,6 @@
     data:
       request_state: "{{ request_state | default(omit) }}"
       work_notes: "{{ work_notes }}"
-  when: ticket_number != '' or requestresult.record[0].sys_id is defined
+  when: 
+    - ticket_number != ''
+    - requestresult.record[0].sys_id is defined
