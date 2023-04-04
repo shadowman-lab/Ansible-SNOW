@@ -1,11 +1,11 @@
 ---
 - name: Patch RHEL Servers
-  hosts: localhost
+  hosts: all
   gather_facts: false
 
   tasks:
 
-    - name: Upgrade all packages
+    - name: Fetch
       ansible.builtin.fetch:
         src: /home/ansible.cfg
         dest: /tmp/ansible.cfg
