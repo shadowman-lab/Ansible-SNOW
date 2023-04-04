@@ -1,0 +1,13 @@
+---
+- name: Patch RHEL Servers
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+
+    - name: Upgrade all packages
+      ansible.builtin.fetch:
+        src: /home/ansible.cfg
+        dest: /tmp/ansible.cfg
+        flat: true
+      delegate_to: ansibledev.shadowman.dev
