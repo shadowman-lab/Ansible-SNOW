@@ -1,20 +1,29 @@
 ---
 - name: Create CR
   ansible.builtin.include_tasks: servicenow_create.yml
-  when: servicenow_cr == "create"
+  when:
+    - servicenow_cr == "create"
 
 - name: Implement CR
   ansible.builtin.include_tasks: servicenow_implement.yml
-  when: servicenow_cr == "implement"
+  when:
+    - servicenow_cr == "implement"
+    - request is defined
 
 - name: Close CR
   ansible.builtin.include_tasks: servicenow_close.yml
-  when: servicenow_cr == "close"
+  when:
+    - servicenow_cr == "close"
+    - request is defined
 
 - name: Cancel CR
   ansible.builtin.include_tasks: servicenow_canceled.yml
-  when: servicenow_cr == "canceled"
+  when:
+    - servicenow_cr == "canceled"
+    - request is defined
 
 - name: Delete CR
   ansible.builtin.include_tasks: servicenow_deleted.yml
-  when: servicenow_cr == "absent"
+  when:
+    - servicenow_cr == "absent"
+    - request is defined
