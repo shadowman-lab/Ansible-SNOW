@@ -133,6 +133,10 @@ Right-click inside the grey area at the top; click **Save**.
 #### 13)
 Click the **Get Oauth Token** button on the REST Message screen. This will generate a pop-up window asking to authorize ServiceNow against your AAP instance/cluster. Click Authorize. ServiceNow will now have an Oauth2 token to authenticate against your AAP server.
 
+Note: The ServiceNow user MUST be able to access the ServiceNow API (check if the user you are logged into ServiceNow with has API access)
+
+Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click Authorize.
+
 <img src="images/snow_authorize.png" alt="SNOW Authorize" title="SNOW Authorize" width="500" />
 
 #### 14)
@@ -356,7 +360,7 @@ Under Related Links select "Create New Connection & Credential" and enter in the
 | Parameter | Value |
 |-----|-----|
 | Connection Name  | `<provider-name> Spoke Connection` |
-|  Connection URL  |  `https://<aap_url>/api/o/authorize/` |
+|  Connection URL  |  `https://<aap_url>` |
 |  Credential Name |  `<provider-name> Spoke Credentials` |
 |  Application Registry Name |  `<provider-name>` |
 |  OAuth Client ID | The Client ID you got from AAP |
@@ -370,6 +374,8 @@ Under Related Links select "Create New Connection & Credential" and enter in the
 <img src="images/connection_credential.png" alt="Connection & Credential" title="Connection & Credential" width="800" />
 
 Select **Create and Get OAuth Token** to complete the Ansible spoke set up.  This will generate a window asking to authorize ServiceNow against your AAP instance/cluster. Click **Authorize**. 
+
+Note: The ServiceNow user MUST be able to access the ServiceNow API (check if the user you are logged into ServiceNow with has API access)
 
 Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click **Authorize**.
 
