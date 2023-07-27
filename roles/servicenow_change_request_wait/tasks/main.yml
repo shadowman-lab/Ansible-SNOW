@@ -13,6 +13,9 @@
         assignment_group: "CAB Approval"
         state: assess
       register: request
+      until: request.changed is defined
+      retries: 5
+      delay: 5
       delegate_to: localhost
 
     - name: Pass along request information
