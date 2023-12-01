@@ -1,5 +1,6 @@
 include README.md
 include *.yml
+include devfile.yaml
 include .config/ansible-lint.yml
 include .github/workflows/ansible-lint.yml
 include *.code-workspace
