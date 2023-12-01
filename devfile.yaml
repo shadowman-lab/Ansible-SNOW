@@ -10,3 +10,15 @@ components:
       cpuRequest: 250m
       cpuLimit: 2000m
     name: ansible
+commands:
+  - id: install-ansible-extension
+    exec:
+      commandLine: '/checode/checode-linux-libc/bin/remote-cli/code-oss --install-extension redhat.ansible'
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+      component: ansible
+events:
+  postStart:
+    - "install-ansible-extension"
