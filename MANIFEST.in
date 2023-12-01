@@ -1,6 +1,5 @@
 include README.md
 include *.yml
-include .vscode/extensions.json
 include devfile.yaml
 include .config/ansible-lint.yml
 include .github/workflows/ansible-lint.yml
