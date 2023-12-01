@@ -1,13 +1,6 @@
 schemaVersion: 2.2.0
 metadata:
   name: ansible-snow-development
-attributes:
-  .vscode/extensions.json: |
-    {
-      "recommendations": [
-        "redhat.ansible"
-      ]
-    }
 components:
   - container:
       args: ['tail', '-f', '/dev/null']
