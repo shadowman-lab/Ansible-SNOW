@@ -161,6 +161,10 @@ Under the HTTP Methods section at the bottom, click the blue New button. At the 
 ```
 **NOTE** `from_snow` is hard coded to be true; we do not want the user to change this value as this request is in fact coming from ServiceNow.
 
+**NOTE** For the extra variables to be received by controller, one of the following must be true for the Job Template:
+They correspond to variables in an enabled survey.
+Prompt on launch for Varibles (or ask_variables_on_launch in the API) is set to True.
+
 #### 15)
 As we user-provided parameters in the Content field, click on Auto-generate variables in order to generate variables for test runs. Populate the Test value column with some default values that you would like to test your call with (see below for an example). You can then kick off a RESTful call to AAP using these parameters with the **Test** link.
 
@@ -503,6 +507,10 @@ Click on the blue **Done** Button
 <img src="images/launch_job.png" alt="Launch Job" title="Launch Job" width="800" />
 
 Click Save and then click Activate on the top bar
+
+**NOTE** For the extra variables to be received by controller, one of the following must be true for the Job Template:
+They correspond to variables in an enabled survey.
+Prompt on launch for Varibles (or ask_variables_on_launch in the API) is set to True.
 
 ### Update Catalog With Newly Created Flow
 
