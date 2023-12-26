@@ -1,10 +1,11 @@
+---
 - name: Close a change request
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars:
-    servicenow_cr: "close"
+    servicenow_cr: close
 
   roles:
     - servicenow_change_request

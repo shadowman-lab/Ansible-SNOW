@@ -1,3 +1,4 @@
+---
 - name: Update CMDB table
   hosts: "{{ vm_name | default('all') }}"
   gather_facts: false

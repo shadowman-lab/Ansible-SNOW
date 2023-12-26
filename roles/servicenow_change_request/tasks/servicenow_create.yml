@@ -3,8 +3,8 @@
   servicenow.itsm.change_request:
     state: new
     type: standard
-    template: "Reboot Windows Server - 1"
-    short_description: "Reboot Windows Server"
+    template: Reboot Windows Server - 1
+    short_description: Reboot Windows Server
     requested_by: admin
     other:
       cmdb_ci: "{{ ip_addr }}"
