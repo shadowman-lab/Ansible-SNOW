@@ -15,3 +15,4 @@ offline: false
 warn_list:
   - yaml
   - git-latest
+  - var-naming[no-role-prefix]
