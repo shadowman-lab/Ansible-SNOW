@@ -8,7 +8,7 @@ exclude_paths:
 # Load custom rules from this specific folder
 # rulesdir:
 #   - ./rule/directory/
-offline: true
+offline: false
 # Any rule that has the 'opt-in' tag will not be loaded unless its 'id' is
 # mentioned in the enable_list:
 # This makes the linter display but not fail for rules/tags listed below:
