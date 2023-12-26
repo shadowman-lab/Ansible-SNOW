@@ -1,10 +1,11 @@
+---
 - name: Update an incident in ServiceNow
   hosts: all
   gather_facts: false
   connection: local
 
   vars:
-    servicenow_ticket: "update"
+    servicenow_ticket: update
 
   roles:
     - servicenow_ticket

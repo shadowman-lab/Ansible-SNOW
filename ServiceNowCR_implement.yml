@@ -1,10 +1,11 @@
+---
 - name: Implement a change request
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars:
-    servicenow_cr: "implement"
+    servicenow_cr: implement
 
   roles:
     - servicenow_change_request

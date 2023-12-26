@@ -3,6 +3,6 @@
   servicenow.itsm.incident:
     state: closed
     number: "{{ ticket_number }}"
-    close_code: "Solved (Permanently)"
+    close_code: Solved (Permanently)
     close_notes: "{{ comment }}"
   delegate_to: localhost

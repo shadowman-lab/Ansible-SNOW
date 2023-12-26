@@ -1,9 +1,10 @@
+---
 - name: Find an incident in ServiceNow
   hosts: localhost
   gather_facts: false
 
   vars:
-    servicenow_ticket: "find"
+    servicenow_ticket: find
 
   roles:
     - servicenow_ticket

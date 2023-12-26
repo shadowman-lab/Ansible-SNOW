@@ -1,13 +1,14 @@
+---
 - name: Create an incident in ServiceNow for IP Blocking
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars:
-    incident_description: "AAP IP Block"
+    incident_description: AAP IP Block
     sn_urgency: high
     sn_impact: high
-    servicenow_ticket: "create"
+    servicenow_ticket: create
 
   roles:
     - servicenow_ticket
