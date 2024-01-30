@@ -6,8 +6,8 @@
       servicenow.itsm.change_request:
         type: normal
         short_description: "{{ cr_description }}"
-        description: "{{ owner | default('Shadowman') }} requests {{ operating_system | default('') }} server in {{ shadowman_provision_hypervisor | default('') }}
-          with name {{ vm_name | default('') }} and environment {{ env | default('test') }}"
+        description: "{{ owner | default('Shadowman') }} requests {{ operating_system | default('') }} server in
+         {{ shadowman_provision_hypervisor | default('') }} with name {{ vm_name | default('') }} and environment {{ env | default('test') }}"
         priority: high
         risk: moderate
         impact: low
@@ -33,8 +33,8 @@
         password: "{{ EMAIL_PASSWORD }}"
         port: "{{ EMAIL_PORT }}"
         subject: Approval request for ServiceNow Change Request {{ request.record.number }}
-        body: "You have a new CR Approval request. Please click on this URL to approve: {{ lookup('env', 'SN_HOST') }}nav_to.do?uri=change_request.do?sysparm_query=number={{
-          request.record.number }}"
+        body: "You have a new CR Approval request. Please click on this URL to approve:
+          {{ lookup('env', 'SN_HOST') }}nav_to.do?uri=change_request.do?sysparm_query=number={{ request.record.number }}"
         from: tower@shadowman.dev
         to: "{{ to_email }}"
       delegate_to: localhost
