@@ -25,6 +25,9 @@
 
 ## ServiceNow/AAP Integration Instructions using Rest Messages
 
+## Notes
+- ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3, 6-11. In step 12, click Authentication Type of Basic. Click the Magnifying Glass next to the Basic Auth Profile and create a new profile with a valid AAP username and password. Skip step 13. In step 14, under HTTP Request, ensure you select the desired MID Server next to Use MID Server.
+
 ### Preparing AAP
 
 #### 1)
@@ -288,7 +291,10 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 
 ## ServiceNow/AAP Integration Instructions using Ansible Spoke
 
-This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your automation controller from ServiceNow (a mid-server can be utilized). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and 2.1 as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
+This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your automation controller from ServiceNow (a mid-server can be utilized but only basic Auth will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
+
+## Notes
+- ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3 and replace steps 6 and 7 with https://docs.servicenow.com/bundle/tokyo-application-development/page/administer/integrationhub-store-spokes/task/setup-ansible.html#setup-ansiblespk-basic
 
 ### Preparing AAP
 
@@ -336,6 +342,8 @@ Moving over to ServiceNow, Navigate to **System Definition-->Certificates**. Thi
 Click the **Submit** (or **Update** if you had a previous AAP certificate) button at the bottom.
 
 ### Set Up Ansible Spoke
+
+If using a MID server, skip steps 6 and 7 and perform https://docs.servicenow.com/bundle/tokyo-application-development/page/administer/integrationhub-store-spokes/task/setup-ansible.html#setup-ansiblespk-basic
 
 #### 6)
 Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Click the existing "AnsibleTowerAlias" alias. In the resulting dialog window, ensure the following fields are filled in:
