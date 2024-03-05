@@ -579,7 +579,7 @@ Now we will create a basic rulebook in order to display the information sent by 
       action:
         debug:
 ```
-A more detailed rulebook example including a job template
+A more detailed rulebook example including a Workflow Job Template
 ```
 ---
 - name: Listen for events on a webhook from ServiceNow
@@ -591,14 +591,15 @@ A more detailed rulebook example including a job template
 
   rules:
     - name: Respond to Node Exporter Down Incident
-      condition: event.payload.short_description  == "Prometheus Node Exporter is down" event.payload.token == "{{ servicenow_token }}"
+      condition: event.payload.short_description  == "Prometheus Node Exporter is down" and event.payload.token == "{{ servicenow_token }}"
       action:
-        run_job_template:
-          name: "Start Prometheus Node Exporter"
-          organization: "Infrastructure"
+        run_workflow_template:
+          name: "Automated Response Node Exporter Down"
+          organization: "Security"
           job_args:
             extra_vars:
               vm_name: "{{ event.payload.u_vm_name }}"
+              ticket_number: "{{ event.payload.number }}"
 ```
 
 #### 4)
@@ -614,9 +615,9 @@ On the new page, click **History** and ensure the rulebook is successfully runni
 
 #### 5)
 Now we will configure the Event-Driven Ansible Notification as the ServiceNow user we just assigned permissions. Navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. In the Webhook Configurations section fill in a Webhook URL and a
-Webhook authorization token if desired. The webhook URL should your EDA Controller server plus the port your rulebook webhook will be listening on, for example **http://eda.shadowman.dev:5003/endpoint**
+Webhook authorization token if desired. The webhook URL should the FQDN of your Event-Driven Ansible Controller server plus the port your rulebook webhook will be listening on, for example **http://eda.shadowman.dev:5003/endpoint**
 
-No MID Server is needed if the webhook url is accessible directly from the running servicenow instance. Otherwise fill in a proper MID Server name. The machine listening to the webhook requests must be reachable by the MID Server. To validate the MID Server use the **All** menu and select **MID Servers -> Servers**. The selected MID Server must appear on the server list and its Status field must be Up and its Validated field must be Yes.
+No MID Server is needed if the Webhook URL is accessible directly from the running ServiceNow instance. Otherwise, fill in a proper MID Server name. Your Event-Driven Ansible Controller server listening to the webhook requests must be reachable by the MID Server. To validate the MID Server use the **All** menu and select **MID Servers -> Servers**. The selected MID Server must appear on the server list and its Status field must be Up and its Validated field must be Yes.
 
 Click the **Test Connectivity** button to test the connection from the running servicenow instance to the configured webhook. If successful, it will display “Webhook Connection OK”.
 
@@ -628,7 +629,7 @@ Finally click the **OK** button to persist all the settings. These settings can 
 <img src="images/eda_configuration.png" alt="Event-Driven Ansible Configuration" title="Event-Driven Ansible Configuration" width="1000" />
 
 #### 6)
-To test the configuration and see the output provided by ServiceNow, I will use Incidents. For this test, navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. Check **When Created** for the Incident table if you haven't already. Click **OK** to confirm the changes. Create a new Incident, navigate to the **All** menu and select **Incident -> Create New**. Fill in the incident information (at a minimum you need Caller and Short description) and click Submit.
+To test the configuration and see the output provided by ServiceNow, you can easily create a test Incident. For this test, navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. Check **When Created** for the Incident table if you haven't already. Click **OK** to confirm the changes. Create a new Incident, navigate to the **All** menu and select **Incident -> Create New**. Fill in the incident information (at a minimum you need Caller and Short description) and click Submit.
 
 Navigate to Event-Driven Ansible Controller and select **Rule Audit**. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on **ansible.eda.webhook** to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
 
