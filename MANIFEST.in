@@ -5,6 +5,7 @@ include .vscode/extensions.json
 include devfile.yaml
 include .config/ansible-lint.yml
 include .github/workflows/ansible-lint.yml
+include .github/workflows/web-ide.yml
 include .github/ansible-code-bot.yml
 include *.code-workspace
 recursive-exclude .git *

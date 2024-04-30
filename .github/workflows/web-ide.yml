@@ -1,0 +1,20 @@
+name: web-ide
+
+on:
+  pull_request_target:
+    types:
+      - opened
+
+jobs:
+  add-link:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Review in OpenShift DevSpaces
+        id: try-in-web-ide
+        uses: redhat-actions/try-in-web-ide@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          add_comment: true
+          add_status: false
+          web_ide_instance: https://devspaces.apps.hypershift.shadowman.dev
+          comment_badge: https://img.shields.io/badge/Eclipse_Che-Hosted%20by%20Red%20Hat%20(Development)-525C86?logo=eclipse-che&labelColor=red
