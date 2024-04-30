@@ -17,4 +17,4 @@ jobs:
           add_comment: true
           add_status: false
           web_ide_instance: https://devspaces.apps.hypershift.shadowman.dev
-          comment_bade: https://img.shields.io/badge/OpenShift_Dev_Spaces-Hosted%20on%20prem%20-525C86?logo=redhatopenshift&labelColor=EE0000
+          comment_bade: https://img.shields.io/badge/OpenShift-Dev%20Spaces-525C86?logo=redhatopenshift&labelColor=EE0000
