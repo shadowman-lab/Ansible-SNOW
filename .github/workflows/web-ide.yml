@@ -17,4 +17,3 @@ jobs:
           add_comment: true
           add_status: false
           web_ide_instance: https://devspaces.apps.hypershift.shadowman.dev
-          comment_badge: https://img.shields.io/badge/Eclipse_Che-Hosted%20by%20Red%20Hat%20(Development)-525C86?logo=eclipse-che&labelColor=red
