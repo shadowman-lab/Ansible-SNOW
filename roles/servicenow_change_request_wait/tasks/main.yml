@@ -36,7 +36,7 @@
         body: "You have a new CR Approval request. Please click on this URL to approve:
           {{ lookup('env', 'SN_HOST') }}nav_to.do?uri=change_request.do?sysparm_query=number={{ request.record.number }}"
         from: tower@shadowman.dev
-        to: "{{ servicenow_change_request_wait_to_email }}"
+        to: "{{ to_email }}"
       delegate_to: localhost
 
     - name: Wait for Change Request approval
