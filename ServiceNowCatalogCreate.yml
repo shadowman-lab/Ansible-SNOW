@@ -1,0 +1,7 @@
+---
+- name: Create a Service Catalog in ServiceNow
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - servicenow_catalog_create
