@@ -34,7 +34,7 @@
       short_description: "Deploy a new virtual machine"
   when: catalogitemresult.record | length == 0
 
-- name: Create Single Line Variable
+- name: Create Single Line Variable to enter VM Name
   servicenow.itsm.api:
     resource: item_option_new
     action: post
@@ -48,7 +48,7 @@
       order: 100
   when: catalogitemresult.record | length == 0
 
-- name: Create Multi Select Variable
+- name: Create Select Box Variable to pick OS
   servicenow.itsm.api:
     resource: item_option_new
     action: post
@@ -62,7 +62,7 @@
       mandatory: true
   when: catalogitemresult.record | length == 0
 
-- name: Add Options to Multi Select Variable
+- name: Add Options to Select Box Variable to pick OS
   servicenow.itsm.api:
     resource: question_choice
     action: post
