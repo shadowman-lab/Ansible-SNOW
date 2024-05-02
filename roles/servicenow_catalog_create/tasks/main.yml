@@ -1,0 +1,81 @@
+---
+- name: Check if category already exists
+  servicenow.itsm.api_info:
+    resource: sc_category
+    sysparm_query: titleSTARTSWITHAnsible Jobs
+  register: categoryresult
+
+- name: Create Catalog Category
+  servicenow.itsm.api:
+    resource: sc_category
+    action: post
+    data:
+      title: "Ansible Jobs"
+      sc_catalog: "Service Catalog"
+      description: "Jobs launced from AAP"
+      active: true
+  when: categoryresult.record | length == 0
+
+- name: Check if Catalog Item already exists
+  servicenow.itsm.api_info:
+    resource: sc_cat_item
+    sysparm_query: nameSTARTSWITHProvision VM
+  register: catalogitemresult
+
+- name: Create Catalog Item
+  servicenow.itsm.api:
+    resource: sc_cat_item
+    action: post
+    data:
+      name: "Provision VM"
+      sc_catalogs: "Service Catalog"
+      category: "Ansible Jobs"
+      active: true
+      short_description: "Deploy a new virtual machine"
+  when: catalogitemresult.record | length == 0
+
+- name: Create Single Line Variable
+  servicenow.itsm.api:
+    resource: item_option_new
+    action: post
+    data:
+      type: "Single Line Text"
+      cat_item: "Provision VM"
+      question_text: "What is your VM name?"
+      name: "vm_name"
+      active: true
+      mandatory: true
+      order: 100
+  when: catalogitemresult.record | length == 0
+
+- name: Create Multi Select Variable
+  servicenow.itsm.api:
+    resource: item_option_new
+    action: post
+    data:
+      type: "Select Box"
+      cat_item: "Provision VM"
+      question_text: "Pick your OS"
+      name: "operating_system"
+      order: 200
+      active: true
+      mandatory: true
+  when: catalogitemresult.record | length == 0
+
+- name: Add Options to Multi Select Variable
+  servicenow.itsm.api:
+    resource: question_choice
+    action: post
+    data:
+      type: "Select Box"
+      cat_item: "Provision VM"
+      question: "Pick your OS"
+      text: "{{ item.text }}"
+      value: "{{ item.value }}"
+      order: "{{ item.order }}"
+  loop:
+    - { text: 'RHEL7', value: 'RHEL7', order: '100' }
+    - { text: 'RHEL8', value: 'RHEL8', order: '200' }
+    - { text: 'RHEL9', value: 'RHEL9', order: '300' }
+    - { text: 'Win2016', value: 'Win2016', order: '400' }
+  when: catalogitemresult.record | length == 0
