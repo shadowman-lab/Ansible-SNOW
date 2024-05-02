@@ -1,6 +1,7 @@
 {
     "recommendations": [
       "redhat.ansible",
-      "redhat.vscode-yaml"
+      "redhat.vscode-yaml",
+      "redhat.vscode-redhat-account"
     ]
 }
