@@ -1,7 +1,7 @@
 include README.md
 include *.yml
-include *.gitignore
 include .vscode/extensions.json
+include .vscode/settings.json
 include devfile.yaml
 include .config/ansible-lint.yml
 include .github/workflows/ansible-lint.yml

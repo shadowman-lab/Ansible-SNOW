@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "*.yml": "ansible"
+    },
+    "git.enableSmartCommit": true,
+    "window.commandCenter": false,
+    "redhat.telemetry.enabled": false,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "ansible.lightspeed.suggestions.enabled": true,
+    "ansible.lightspeed.enabled": true,
+    "files.autoSave": "off",
+    "ansible.lightspeed.disableContentSuggestionHeader": true
+}
