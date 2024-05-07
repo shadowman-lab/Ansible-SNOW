@@ -2,6 +2,7 @@
 - name: Update SNOW CMDB
   servicenow.itsm.configuration_item:
     state: "{{ status }}"
+    asset_tag: "{{ owner }}"
     name: "{{ inventory_hostname }}"
     ip_address: "{{ ip_addr | default(omit) }}"
     sys_class_name: cmdb_ci_server
