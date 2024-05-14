@@ -579,7 +579,7 @@ Now we will create a basic rulebook in order to display the information sent by 
       action:
         debug:
 ```
-A more detailed rulebook example including a Workflow Job Template
+A more detailed rulebook example with an https webhook source and a token for source verification including calling Workflow Job Template
 ```
 ---
 - name: Listen for events on a webhook from ServiceNow
@@ -588,10 +588,13 @@ A more detailed rulebook example including a Workflow Job Template
     - ansible.eda.webhook:
         host: 0.0.0.0
         port: 5003
+        certfile: /certs/shadowman_cert.cer
+        keyfile: /certs/shadowman_private.key
+        token: "{{ eda_auth_token }}"
 
   rules:
     - name: Respond to Node Exporter Down Incident
-      condition: event.payload.short_description  == "Prometheus Node Exporter is down" and event.payload.token == "{{ servicenow_token }}"
+      condition: event.payload.short_description  == "Prometheus Node Exporter is down"
       action:
         run_workflow_template:
           name: "Automated Response Node Exporter Down"
