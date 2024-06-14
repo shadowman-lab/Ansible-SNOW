@@ -22,3 +22,8 @@
   ansible.builtin.set_stats:
     data:
       ticket_number: "{{ new_incident.record.number }}"
+
+- name: Pass Incident Link to rest of workflow
+  ansible.builtin.set_stats:
+    data:
+      snow_incident_link: "ServiceNow Incident: {{ lookup('env', 'SN_HOST') }}nav_to.do?uri=incident.do?sysparm_query=number={{ new_incident.record.number }} "
