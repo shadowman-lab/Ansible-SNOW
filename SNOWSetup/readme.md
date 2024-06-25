@@ -52,7 +52,12 @@ Click the blue **Save** button, at which point a window will pop up, presenting 
 #### 3)
 Next, navigate to **Settings** on the left side of the screen and then **Miscellaneous Authentication settings**. After you click Edit at the bottom, you’ll want to toggle the **Allow External Users to Create Oauth2 Tokens** option to ***on***. Click the blue **Save** button to commit the change.
 
+## Note
+- This is only needed if using a non-local user within automation controller for the integration.
+
 <img src="images/tower_settings.png" alt="AAP Settings" title="AAP Settings" width="1000" />
+
+
 
 #### 4)
 The Orlando release of the ServiceNow developer instance does not allow for the self-signed certificate provided by AAP. We need to equip our AAP instance with a certificate from a trusted Certificate Authority. The easiest way to accomplish this is to SSH into AAP and run the Certbot ACME client in order to generate a certificate from LetsEncrypt (instructions can be found [here](https://letsencrypt.org/getting-started/)). It is important to place the contents of the root certificate + the intermediate certificate + the certificate you generate (found at `/etc/letsencrypt/live/<tower domain>/cert.pem`) at the location AAP places its self-signed certificate, `/etc/tower/tower.cert`. The LetsEncrypt intermediate certificate can be found [here](https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt). You must also replace the contents of `/etc/tower/tower.key` with the contents of `/etc/letsencrypt/live/<tower domain>/privkey.pem`.
@@ -319,6 +324,9 @@ Click the blue **Save** button, at which point a window will pop up, presenting 
 
 #### 3)
 Next, navigate to **Settings** on the left side of the screen and then **Miscellaneous Authentication settings**. After you click Edit at the bottom, you’ll want to toggle the **Allow External Users to Create Oauth2 Tokens** option to ***on***. Click the blue **Save** button to commit the change.
+
+## Note
+- This is only needed if using a non-local user within automation controller for the integration.
 
 <img src="images/tower_settings.png" alt="AAP Settings" title="AAP Settings" width="1000" />
 
