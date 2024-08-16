@@ -7,7 +7,8 @@
     priority: high
     risk: moderate
     other:
-      start_date: "{{ date_time }}"
+      start_date: "{{ date_time | default(omit) }}"
+      u_ritm: "{{ servicenow_ritm | default(omit) }}"
     impact: low
     assignment_group: CAB Approval
     state: assess
