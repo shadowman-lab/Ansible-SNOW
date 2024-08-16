@@ -1,0 +1,2 @@
+---
+to_email: "{{ to_emails.split(',') }}"
