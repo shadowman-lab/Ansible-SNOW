@@ -16,6 +16,11 @@
     - servicenow_cr == "close"
     - request is defined
 
+- name: Close CR
+  ansible.builtin.include_tasks: servicenow_close_cr.yml
+  when:
+    - servicenow_cr == "close_cr"
+
 - name: Cancel CR
   ansible.builtin.include_tasks: servicenow_canceled.yml
   when:

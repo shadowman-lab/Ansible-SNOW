@@ -1,0 +1,14 @@
+---
+- name: Place a change request in ServiceNow in Review
+  servicenow.itsm.change_request:
+    state: review
+    number: "{{ change_request_number }}"
+  delegate_to: localhost
+
+- name: Close a change request
+  servicenow.itsm.change_request:
+    state: closed
+    number: "{{ change_request_number }}"
+    close_code: "{{ close_code }}"
+    close_notes: "{{ close_notes }}"
+  delegate_to: localhost
