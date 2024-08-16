@@ -28,6 +28,12 @@
     - servicenow_cr == "canceled"
     - request is defined
 
+- name: Cancel CR
+  ansible.builtin.include_tasks: servicenow_canceled_cr.yml
+  when:
+    - servicenow_cr == "canceled"
+    - change_request_number is defined
+
 - name: Delete CR
   ansible.builtin.include_tasks: servicenow_deleted.yml
   when:
