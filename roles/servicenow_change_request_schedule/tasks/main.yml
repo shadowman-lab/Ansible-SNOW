@@ -1,0 +1,20 @@
+---
+- name: Create a change request in ServiceNow with Start Date
+  servicenow.itsm.change_request:
+    type: normal
+    short_description: "{{ cr_short_description }}"
+    description: "{{ owner | default('Shadowman') }} requests {{ cr_description }}"
+    priority: high
+    risk: moderate
+    other:
+      start_date: "{{ date_time }}"
+    impact: low
+    assignment_group: CAB Approval
+    state: assess
+  register: request
+
+- name: Pass along request information
+  ansible.builtin.set_stats:
+    data:
+      request: "{{ request }}"
+    per_host: false

@@ -1,0 +1,7 @@
+---
+- name: Schedule a Change Request in ServiceNow
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - servicenow_change_request_schedule
