@@ -7,6 +7,8 @@
 
 [ServiceNow/AAP Integration Instructions using Event-Driven Ansible Notification Service](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
 
+[ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
+
 [Have AAP reach out to ServiceNow](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#have-aap-reach-out-to-servicenow)
 
 [Have AAP use ServiceNow as an inventory source](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#have-aap-use-servicenow-as-an-inventory-source)
@@ -301,7 +303,7 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your automation controller from ServiceNow (a mid-server can be utilized but only basic Auth will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
 
 ## Notes
-- ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3 and replace steps 6 and 7 with https://docs.servicenow.com/bundle/tokyo-application-development/page/administer/integrationhub-store-spokes/task/setup-ansible.html#setup-ansiblespk-basic
+- ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3 and replace steps 6 and 7 with [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
 
 ### Preparing AAP
 
@@ -645,6 +647,46 @@ To test the configuration and see the output provided by ServiceNow, you can eas
 Navigate to Event-Driven Ansible Controller and select **Rule Audit**. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on **ansible.eda.webhook** to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
 
 <img src="images/eda_json.png" alt="Event-Driven Ansible Controller JSON" title="Event-Driven Ansible Controller JSON" width="1000" />
+
+
+## ServiceNow Basic Auth Connection Configuration
+
+#### 1) Navigate to All > Connections & Credentials > Credentials.
+
+#### 2) Click New.
+The system displays the message What type of Credentials would you like to create?
+
+#### 3) Select Basic Auth Credentials.
+
+#### 4) On the form, fill these values
+
+| Parameter | Value |
+|-----|-----|
+| Name | `Name to uniquely identify the record. For example, enter Ansible Basic Auth Cred.` |
+| User name	 | User name to log in to AAP. Ensure that the Ansible user has the System Administrator role.|
+| Password | Password to log in to AAP. |
+| Active | Option to actively use the credential record. |
+| Order | Order to apply this credential. For example, enter 100. |
+
+#### 5) Click Submit
+
+#### 6) Navigate to All > Connections & Credentials > Connection & Credential Aliases
+
+#### 7) Open the record for Ansible.
+
+#### 8) From the Connections tab, click New.
+
+#### 9) On the form, fill these values
+
+| Parameter | Value |
+|-----|-----|
+| Name | `Name to uniquely identify the connection record. For example, enter Ansible Connection.` |
+| Credential | Credential record you created for AAP. For example, select Ansible Basic Auth Cred. |
+| Connection URL | URL of the AAP instance.|
+
+#### 10) In the Advanced MID Server Configuration tab, select the MID Server as per your requirement.
+
+#### 11) Click Submit.
 
 ## Have AAP reach out to ServiceNow
 
