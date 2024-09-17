@@ -355,7 +355,7 @@ Click the **Submit** (or **Update** if you had a previous AAP certificate) butto
 
 ### Set Up Ansible Spoke
 
-If using a MID server, skip steps 6 and 7 and perform https://docs.servicenow.com/bundle/tokyo-application-development/page/administer/integrationhub-store-spokes/task/setup-ansible.html#setup-ansiblespk-basic
+If using a MID server, skip steps 6 and 7 and perform [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
 
 #### 6)
 Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Click the existing "AnsibleTowerAlias" alias. In the resulting dialog window, ensure the following fields are filled in:
