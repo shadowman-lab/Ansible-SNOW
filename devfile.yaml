@@ -1,3 +1,4 @@
+---
 schemaVersion: 2.3.0
 metadata:
   name: ansible-snow-development
@@ -11,5 +12,5 @@ components:
       cpuLimit: 2000m
       env:
         - name: VSCODE_DEFAULT_WORKSPACE
-          value: "/"
+          value: /
     name: ansible
