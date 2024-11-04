@@ -35,7 +35,7 @@
 ### Preparing AAP
 
 #### 1)
-In AAP, navigate to **Applications** on the left side of the screen. Click the **Blue Add Button** on the right, which will present you with a Create Application dialog screen. Fill in the following fields:
+In AAP 2.4 and older, navigate to **Applications** on the left side of the screen and then click the **Blue Add Button** on the right, which will present you with a Create Application dialog screen. In AAP 2.5 and newer, navigate to **Access Management -> OAuth Applications** on the left side of the screen and then click the **Blue Create OAuth application Button** on the top, which will present you with a Create Application dialog screen. Fill in the following fields:
 | Parameter | Value |
 |-----|-----|
 | Name  | Descriptive name of the application that will contact AAP  |
@@ -47,12 +47,14 @@ In AAP, navigate to **Applications** on the left side of the screen. Click the *
 <img src="images/create_application.png" alt="AAP Create Application" title="AAP Create Application" width="1000" />
 
 #### 2)
-Click the blue **Save** button, at which point a window will pop up, presenting you with the Client ID and Client Secret needed for ServiceNow to make API calls into AAP. This will only be presented **ONCE**, so capture these values for later use.
+Click the blue **Save** button in AAP 2.4 and older or the blue **Create OAuth application** in AAP 2.5 and newer, at which point a window will pop up, presenting you with the Client ID and Client Secret needed for ServiceNow to make API calls into AAP. This will only be presented **ONCE**, so capture these values for later use.
 
 <img src="images/application_secrets.png" alt="AAP Application Secrets" title="AAP Application Secrets" width="500" />
 
 #### 3)
-Next, navigate to **Settings** on the left side of the screen and then **Miscellaneous Authentication settings**. After you click Edit at the bottom, you’ll want to toggle the **Allow External Users to Create Oauth2 Tokens** option to ***on***. Click the blue **Save** button to commit the change.
+Next, in AAP 2.4 or older navigate to **Settings** on the left side of the screen and then **Miscellaneous Authentication settings**. After you click Edit at the bottom, you’ll want to toggle the **Allow External Users to Create Oauth2 Tokens** option to ***on***. Click the blue **Save** button to commit the change.
+
+In AAP 2.5 or newer navigate to **Settings -> Platform gateway** on the left side of the screen. After you click Edit platform gateway settings at the top right, you’ll want to set enabled for the **Allow External Users to Create Oauth2 Tokens** option. Click the blue **Save platform gateway settings** button to commit the change.
 
 ## Note
 - This is only needed if using a non-local user within automation controller for the integration.
@@ -91,16 +93,16 @@ On the new application screen, fill in these details:
 
 <img src="images/snow_app_reg_deets.png" alt="SNOW Application Registry Details" title="SNOW Application Registry Details" width="800" />
 
-| Parameter | Value |
-|-----|-----|
-| Name  | Descriptive Application Name  |
-|  Client ID |  The Client ID you got from AAP |
-|  Client Secret |  The Client Secret you got from AAP |
-|  Default Grant Type |  `Authorization Code` |
-|  Authorization URL |  `https://<aap_url>/api/o/authorize/` |
-|  Token URL |  `https://<aap_url>/api/o/token/` |
-|  Redirect URL |  `https://<snow_instance_id>.service-now.com/oauth_redirect.do` |
-|  Send Credentials |  `As Basic Authorization Header` |
+| Parameter | 2.4 and older Value | 2.5 and newer Value |
+|-----|-----|-----|
+| Name  | Descriptive Application Name  | Descriptive Application Name  |
+|  Client ID |  The Client ID you got from AAP | The Client ID you got from AAP |
+|  Client Secret |  The Client Secret you got from AAP | The Client Secret you got from AAP |
+|  Default Grant Type |  `Authorization Code` | `Authorization Code` |
+|  Authorization URL |  `https://<aap_url>/api/o/authorize/` | `https://<unified_ui_url>/o/authorize/` |
+|  Token URL |  `https://<aap_url>/api/o/token/` | `https://<unified_ui_url>/o/token/` |
+|  Redirect URL |  `https://<snow_instance_id>.service-now.com/oauth_redirect.do` |  `https://<snow_instance_id>.service-now.com/oauth_redirect.do` |
+|  Send Credentials |  `As Basic Authorization Header` |  `As Basic Authorization Header` |
 
 Click the **Submit** button at the bottom.
 
@@ -129,12 +131,12 @@ Navigate to **System Web Services-->Outbound-->REST Messages**. Click the blue *
 
 <img src="images/rest_message.png" alt="REST Message" title="REST Message" width="800" />
 
-| Parameter | Value |
-|-----|-----|
-| Name  | `Provision Cloud Webservers with Users`  |
-|  Endpoint |  The url endpoint of the AAP action you wish to do. This can be taken from the browsable API at `https://<aap_url>/api` |
-|  Authentication Type |  `Oauth 2.0` |
-|  Oauth Profile |  Select the Oauth profile you created |
+| Parameter | 2.4 and older Value | 2.5 and newer Value |
+|-----|-----|-----|
+| Name  | `Provision Cloud Webservers with Users`  |`Provision Cloud Webservers with Users`  |
+|  Endpoint |  The url endpoint of the AAP action you wish to do. This can be taken from the browsable API at `https://<aap_url>/api/v2/` |  The url endpoint of the AAP action you wish to do. This can be taken from the browsable API at `https://<unified_ui_url>/api/controller/v2/` |
+|  Authentication Type |  `Oauth 2.0` |  `Oauth 2.0` |
+|  Oauth Profile |  Select the Oauth profile you created | Select the Oauth profile you created |
 
 Right-click inside the grey area at the top; click **Save**.
 
@@ -154,7 +156,7 @@ Under the HTTP Methods section at the bottom, click the blue New button. At the 
 
 - **HTTP Method**: `POST`
 - **Name**: Descriptive HTTP Method Name
-- **Endpoint**: The url endpoint of the AAP action you wish to do. This can be taken from the browsable API at `https://<aap_url>/api`
+- **Endpoint**: The url endpoint of the AAP action you wish to do. This can be taken from the browsable AAP 2.4 and older API at `https://<aap_url>/api/v2/` or `https://<unified_ui_url>/api/controller/v2/` in AAP 2.5 and newer for example `https://<unified_ui_url>/api/controller/v2/job_templates/41/launch`
 - **HTTP Headers**: ***(under the HTTP Request tab)***
   - The only HTTP Header that should be required is `Content-Type: application/json`
 - **HTTP Query Parameters**: ***(under the HTTP Request tab)***
@@ -308,7 +310,7 @@ This walkthrough assumes you have an Integration Hub Standard/Professional subsc
 ### Preparing AAP
 
 #### 1)
-In AAP, navigate to **Applications** on the left side of the screen. Click the **Blue Add Button** on the right, which will present you with a Create Application dialog screen. Fill in the following fields:
+In AAP 2.4 and older, navigate to **Applications** on the left side of the screen. Click the **Blue Add Button** on the right, which will present you with a Create Application dialog screen. Fill in the following fields:
 | Parameter | Value |
 |-----|-----|
 | Name  | Descriptive name of the application that will contact AAP  |
@@ -318,6 +320,15 @@ In AAP, navigate to **Applications** on the left side of the screen. Click the *
 |  Client Type |  `Confidential` |
 
 <img src="images/create_application.png" alt="AAP Create Application" title="AAP Create Application" width="1000" />
+
+In AAP 2.5 and newer, navigate to **Access Management -> OAuth Applications** on the left side of the screen and then click the **Blue Create OAuth application Button** on the top, which will present you with a Create Application dialog screen. Fill in the following fields:
+| Parameter | Value |
+|-----|-----|
+| Name  | Descriptive name of the application that will contact AAP  |
+|  Organization |  `Default` |
+|  Authorization Grant Type |  `Authorization code` |
+|  Redirect URIs |  `https://<snow_instance_id>.service-now.com/oauth_redirect.do` |
+|  Client Type |  `Confidential` |
 
 #### 2)
 Click the blue **Save** button, at which point a window will pop up, presenting you with the Client ID and Client Secret needed for ServiceNow to make API calls into AAP. This will only be presented **ONCE**, so capture these values for later use.
@@ -374,27 +385,37 @@ Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Cli
 #### 7)
 Under Related Links select "Create New Connection & Credential" and enter in the following information:
 
-| Parameter | Value |
-|-----|-----|
-| Connection Name  | `<provider-name> Spoke Connection` |
-|  Connection URL  |  `https://<aap_url>` |
-|  Credential Name |  `<provider-name> Spoke Credentials` |
-|  Application Registry Name |  `<provider-name>` |
-|  OAuth Client ID | The Client ID you got from AAP |
-|  OAuth Client Secret | The Client Secret you got from AAP |
-|  OAuth Entity Profile Name | Ansible Entity Profile |
-|  OAuth Entity Scope | `write` |
-|  Authorization URL |  `https://<aap_url>/api/o/authorize/` |
-|  Token URL |  `https://<aap_url>/api/o/token/` |
-|  OAuth Redirect URL |  `https://<snow_instance_id>.service-now.com/api/sn_ansible_spoke/ansible_oauth_redirect` |
+| Parameter | 2.4 and older Value | 2.5 and newer Value |
+|-----|-----|-----|
+| Connection Name  | `<provider-name> Spoke Connection` | `<provider-name> Spoke Connection` |
+|  Connection URL  |  `https://<aap_url>` |  `https://<unified_ui_url>` |
+|  Credential Name |  `<provider-name> Spoke Credentials` |`<provider-name> Spoke Credentials` |
+|  Application Registry Name |  `<provider-name>` | `<provider-name>` |
+|  OAuth Client ID | The Client ID you got from AAP | The Client ID you got from AAP |
+|  OAuth Client Secret | The Client Secret you got from AAP | The Client Secret you got from AAP |
+|  OAuth Entity Profile Name | Ansible Entity Profile | Ansible Entity Profile |
+|  OAuth Entity Scope | `write` | `write` |
+|  Authorization URL |  `https://<aap_url>/api/o/authorize/` | `https://<unified_ui_url>/o/authorize/` |
+|  Token URL |  `https://<aap_url>/api/o/token/` | `https://<unified_ui_url>/o/token/` |
+|  OAuth Redirect URL |  `https://<snow_instance_id>.service-now.com/api/sn_ansible_spoke/ansible_oauth_redirect` | `https://<snow_instance_id>.service-now.com/oauth_redirect.do` |
 
 <img src="images/connection_credential.png" alt="Connection & Credential" title="Connection & Credential" width="800" />
 
 Select **Create and Get OAuth Token** to complete the Ansible spoke set up.  This will generate a window asking to authorize ServiceNow against your AAP instance/cluster. Click **Authorize**.
 
+## NOTE In AAP 2.5 this will fail with an HTTP Error 401 - Unauthorized Error because of an API Scipt auto applied by ServiceNow. To fix this:
+
+1) Go to **System OAuth-->Application Registry**. Select the Application Registry you just created. Delete the OAuth API Script field. Click **Update** at the top.
+
+2) Navigate to **All > Connections & Credentials > Credentials**. Select your newly created credential. Under Related Links select **Get Oauth Token**. This will generate a window asking to authorize ServiceNow against your AAP instance/cluster. Click **Authorize**. This should now successfully generate a token
+
+3) You will also need to adjust the API endpoint for AAP 2.5 for Jobs to launch properly. Navigate to **All > Connections & Credentials > Connections** and select your newly created connection. In the Attributes section, Version change **v2** to be **controller/v2** and click Update.
+
 Note: The ServiceNow user MUST be able to access the ServiceNow API (check if the user you are logged into ServiceNow with has API access)
 
 Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click Authorize. You can utilize a System Administrator or a Normal User as this user. If you are using a Normal User, ensure they have execute access on any Job Templates or Workflow Job Templates you intend to run. **Authorize**.
+
+HTTP Error 401 - Unauthorized
 
 ### Create a Catalog Item for Users
 
@@ -616,7 +637,7 @@ A more detailed rulebook example with an https webhook source and a token for so
 ```
 
 #### 4)
-After your rulebook has been pushed to Git, we will login to Event-Driven Ansible controller and go to Projects. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
+On AAP 2.4 After your rulebook has been pushed to Git, we will login to Event-Driven Ansible controller and go to Projects. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
 
 Create a Rulebook Activation by going to **Rulebook Activations** and clicking **+ Create rulebook activation**. Give it a name, select your existing Project, the rulebook you previously created, and your Decision environment (the default Decision Environment will work). Click **Create rulebook activation**.
 
@@ -624,11 +645,21 @@ On the new page, click **History** and ensure the rulebook is successfully runni
 
 <img src="images/eda_controller.png" alt="Event-Driven Ansible Controller" title="Event-Driven Ansible Controller" width="1000" />
 
+On AAP 2.5 and newer, login to the Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
+
+Now we will create a Credential for the Event Stream to use. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **ServiceNow Event Stream** as the Credential Type. Then enter in a token (this can be a randomly generated token from something like Bitwarden). Click **Create credential at the bottom**
+
+Now we will create a Credential for the Automation Platform so Job and Workflow Templates can be launched. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Red Hat Ansible Automation Plaform** as the Credential Type. Enter in host `https://<unified_ui_URL>/api/controller/`, Username that exists in the platform and Password. Click **Create credential at the bottom**
+
+Now go to **Automation Decisions -> Event Streams**. Click **Create event stream** at the top. Enter in a name, select an Organization, select the event stream type of **ServiceNow Event Stream** select the Credential you created in the previous step. Then click **Create event stream**
+
+Now we will create the Rulebook Activation and attach it to the Event Stream. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Select the Gear icon next to Event Streams which will open up a new dialog box. Select your Rulebook Source (which will be the header of your rulebook) and then your Event Stream (your previously created ServiceNow Event Stream) and click **Save**. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential you previously created. Select your Decision environment (the default Decision Environment will work). Click **Create rulebook activation**.
+
 ### Back to ServiceNow
 
 #### 5)
 Now we will configure the Event-Driven Ansible Notification as the ServiceNow user we just assigned permissions. Navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. In the Webhook Configurations section fill in a Webhook URL and a
-Webhook authorization token if desired. The webhook URL should the FQDN of your Event-Driven Ansible Controller server plus the port your rulebook webhook will be listening on, for example **http://eda.shadowman.dev:5003/endpoint**
+Webhook authorization token if desired. The webhook URL should the FQDN of your Event-Driven Ansible Controller server plus the port your rulebook webhook will be listening on, for example on AAP 2.4 **http://eda.shadowman.dev:5003/endpoint** with AAP2.5 you'll navigate to the Event Stream you created at **Automation Decisions -> Event Streams**, select it, and then copy the URL that appears. For example `https://<unified_ui_URL>:443/eda-event-streams/api/eda/v1/external_event_stream/574d0d17-f0b2-4bgf-93ad-g8186a03eede/post/`. If you are using a 443 endpoint you can remove the port, so for example `https://<unified_ui_URL>/eda-event-streams/api/eda/v1/external_event_stream/574d0d17-f0b2-4bgf-93ad-g8186a03eede/post/`
 
 No MID Server is needed if the Webhook URL is accessible directly from the running ServiceNow instance. Otherwise, fill in a proper MID Server name. Your Event-Driven Ansible Controller server listening to the webhook requests must be reachable by the MID Server. To validate the MID Server use the **All** menu and select **MID Servers -> Servers**. The selected MID Server must appear on the server list and its Status field must be Up and its Validated field must be Yes.
 
@@ -644,7 +675,7 @@ Finally click the **OK** button to persist all the settings. These settings can 
 #### 6)
 To test the configuration and see the output provided by ServiceNow, you can easily create a test Incident. For this test, navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. Check **When Created** for the Incident table if you haven't already. Click **OK** to confirm the changes. Create a new Incident, navigate to the **All** menu and select **Incident -> Create New**. Fill in the incident information (at a minimum you need Caller and Short description) and click Submit.
 
-Navigate to Event-Driven Ansible Controller and select **Rule Audit**. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on **ansible.eda.webhook** to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
+Navigate to Event-Driven Ansible Controller and select **Rule Audit** on AAP 2.4 or **Automation Decisions -> Rule Audit** on AAP 2.5. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on **ansible.eda.webhook** to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
 
 <img src="images/eda_json.png" alt="Event-Driven Ansible Controller JSON" title="Event-Driven Ansible Controller JSON" width="1000" />
 
