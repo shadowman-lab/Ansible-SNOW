@@ -592,7 +592,7 @@ After the install is complete, you need to add the EDA role to the ServiceNow us
 ### Preparing AAP
 
 ## Notes
-This assumes you have already set up the token for automation controller within Event-Driven Ansible controller.
+This assumes you have already set up the token for automation controller within Event-Driven Ansible controller if using AAP 2.4. If using AAP 2.5 step 4 will include creating a credential to run Templates.
 
 #### 3)
 Now we will create a basic rulebook in order to display the information sent by ServiceNow. Push this rulebook to a Git repository (ensure it is in a folder called rulebooks from the root of the project). The rulebook is where you will decide what events to monitor for and what actions to take (such as calling an existing Job Template or Workflow Job Template in automation controller). This example rulebook will listen on port 5003 and debug any notifications that appear to help us see what information is sent from ServiceNow.
