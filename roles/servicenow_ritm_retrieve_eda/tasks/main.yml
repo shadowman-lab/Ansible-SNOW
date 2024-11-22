@@ -16,6 +16,17 @@
     ritm_details: "{{ ritms.record }}"
     cacheable: true
 
+- name: Retrieve user details with retries
+  servicenow.itsm.api_info:
+    resource: sys_user
+    sysparm_query: sys_idIN{{ ritm_details | map(attribute='requested_for.value') | join(',') }}
+    columns: [email]
+  register: userinfo
+  when: ritm_details | length > 0
+  until: userinfo.record is defined and userinfo.record | length > 0
+  retries: 3
+  delay: 5
+
 - name: Retrieve variable mappings with retries
   servicenow.itsm.api_info:
     resource: sc_item_option_mtom
@@ -112,6 +123,7 @@
     data:
       enriched_event: "{{ enriched_event }}"
       original_event: "{{ req_number | default({}) }}"
+      user: "{{ userinfo.record[0].email }}"
 
 - name: Display consolidated enriched_event
   ansible.builtin.debug:
