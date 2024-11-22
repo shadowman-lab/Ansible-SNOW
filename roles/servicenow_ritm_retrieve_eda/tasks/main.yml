@@ -111,7 +111,7 @@
   ansible.builtin.set_stats:
     data:
       enriched_event: "{{ enriched_event }}"
-      original_event: "{{ ansible_eda.event | default({}) }}"
+      original_event: "{{ req_number | default({}) }}"
 
 - name: Display consolidated enriched_event
   ansible.builtin.debug:
