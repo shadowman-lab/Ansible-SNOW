@@ -1,0 +1,118 @@
+---
+
+- name: Retrieve RITM details with retries
+  servicenow.itsm.api_info:
+    resource: sc_req_item
+    sysparm_query: request={{ req_sys_id }}
+    display_value: all
+    columns: [sys_id, number, description, short_description, cat_item]
+  register: ritms
+  until: ritms.record is defined and ritms.record | length > 0
+  retries: 3
+  delay: 5
+
+- name: Set RITM details fact
+  ansible.builtin.set_fact:
+    ritm_details: "{{ ritms.record }}"
+    cacheable: true
+
+- name: Retrieve variable mappings with retries
+  servicenow.itsm.api_info:
+    resource: sc_item_option_mtom
+    sysparm_query: request_itemIN{{ ritm_details | map(attribute='sys_id.value') | join(',') }}
+    columns: [sc_item_option, request_item]
+  register: variable_mappings
+  when: ritm_details | length > 0
+  until: variable_mappings.record is defined and variable_mappings.record | length > 0
+  retries: 3
+  delay: 5
+
+- name: Retrieve variable details in one query
+  servicenow.itsm.api_info:
+    resource: sc_item_option
+    sysparm_query: "sys_idIN{{ variable_mappings.record | map(attribute='sc_item_option.value') | join(',') }}"
+    columns: [item_option_new, value, sys_id]
+  register: variable_details
+  when: variable_mappings.record | length > 0
+
+- name: Retrieve variable names using item_option_new IDs
+  servicenow.itsm.api_info:
+    resource: item_option_new
+    sysparm_query: "sys_idIN{{ variable_details.record | map(attribute='item_option_new.value') | join(',') }}"
+    columns: [sys_id, name]
+  register: variable_names
+  when: variable_details.record | length > 0
+
+- name: Create dictionary of variable names by sys_id
+  ansible.builtin.set_fact:
+    variable_name_dict: "{{ dict(variable_names.record | map(attribute='sys_id') | zip(variable_names.record | map(attribute='name'))) }}"
+    cacheable: true
+  when: variable_names.record | length > 0
+
+- name: Combine mappings with variable details
+  ansible.builtin.set_fact:
+    variable_combined: >-
+      {{
+        variable_details.record | map(
+          'combine', {
+            'request_item': (variable_mappings.record | selectattr('sc_item_option.value', 'equalto', item.sys_id) | map(attribute='request_item.value') | first)
+          }
+        ) | list
+      }}
+  loop: "{{ variable_details.record }}"
+  loop_control:
+    label: "{{ item.sys_id }}"
+  when: variable_details.record | length > 0
+
+- name: Combine variable names and values grouped by RITM
+  ansible.builtin.set_fact:
+    ritm_variables: >-
+      {{
+        ritm_variables | default({}) | combine({
+          item.request_item: (ritm_variables[item.request_item] | default([])) + [{
+            'name': variable_name_dict[item.item_option_new.value],
+            'value': item.value
+          }]
+        })
+      }}
+  loop: "{{ variable_combined }}"
+  loop_control:
+    label: "{{ item.item_option_new.value }}"
+  when: variable_combined | length > 0
+
+- name: Build enriched_event structure with initial data
+  ansible.builtin.set_fact:
+    enriched_event: >-
+      {{
+        {
+          'req_sys_id': req_sys_id | default('Unknown Request ID'),
+          'ritm_details': ritm_details | default([]),
+          'ritm_variables': ritm_variables | default({}),
+        }
+      }}
+
+- name: Nest RITM variables into RITM details
+  ansible.builtin.set_fact:
+    enriched_event: >-
+      {{
+        enriched_event | combine({
+          'ritm_details': enriched_event.ritm_details | map(
+            'combine', {
+              'variables': enriched_event.ritm_variables[item.sys_id.value] | default([])
+            }
+          ) | list
+        })
+      }}
+  loop: "{{ enriched_event.ritm_details }}"
+  loop_control:
+    label: "{{ item.sys_id.value }}"
+
+- name: Consolidate all facts and original event into set_stats
+  ansible.builtin.set_stats:
+    data:
+      enriched_event: "{{ enriched_event }}"
+      original_event: "{{ ansible_eda.event | default({}) }}"
+
+- name: Display consolidated enriched_event
+  ansible.builtin.debug:
+    var: enriched_event

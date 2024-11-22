@@ -1,0 +1,7 @@
+---
+- name: Retrieve RITM from EDA Trigger
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - servicenow_ritm_retrieve_eda
