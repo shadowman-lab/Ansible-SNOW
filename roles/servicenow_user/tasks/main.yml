@@ -5,6 +5,11 @@
     sysparm_query: user_nameSTARTSWITH{{ snow_username }}
   register: requestresult
 
+- name: Indicate user already exists a record is found
+  ansible.builtin.debug:
+    msg: "{{ snow_username }} already exists"
+  when: requestresult.record | length  > 0
+
 - name: Create ServiceNow User
   servicenow.itsm.api:
     resource: sys_user
