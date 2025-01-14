@@ -1,4 +1,10 @@
 ---
+- name: Check if user already exists
+  servicenow.itsm.api_info:
+    resource: sys_user
+    sysparm_query: user_nameSTARTSWITH{{ snow_username }}
+  register: requestresult
+
 - name: Create ServiceNow User
   servicenow.itsm.api:
     resource: sys_user
@@ -14,6 +20,7 @@
       email: "{{ snow_username }}@shadowman.dev"
       title: Shadowman
   register: user
+  when: requestresult.record | length  > 0
 
 - name: Attach role to new user
   servicenow.itsm.api:
@@ -22,3 +29,4 @@
     data:
       user: "{{ snow_username }}"
       role: admin
+  when: requestresult.record | length  > 0
