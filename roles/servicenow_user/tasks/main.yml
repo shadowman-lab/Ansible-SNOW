@@ -20,7 +20,7 @@
       email: "{{ snow_username }}@shadowman.dev"
       title: Shadowman
   register: user
-  when: requestresult.record | length  > 0
+  when: requestresult.record | length  == 0
 
 - name: Attach role to new user
   servicenow.itsm.api:
@@ -29,4 +29,4 @@
     data:
       user: "{{ snow_username }}"
       role: admin
-  when: requestresult.record | length  > 0
+  when: requestresult.record | length  == 0
