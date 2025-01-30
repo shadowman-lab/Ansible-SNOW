@@ -18,7 +18,7 @@
 ## Notes
 - These instructions assume that there is no MID-Server for ServiceNow, and that the ServiceNow instance and AAP can talk to each other directly over the public internet.
 - This has been tested with:
-  - Ansible Tower 3.6, 3.7, 3.8, AAP 2.0, 2.1, 2.2, 2.3, 2.4
+  - Ansible Tower 3.6, 3.7, 3.8, AAP 2.0, 2.1, 2.2, 2.3, 2.4, 2.5
   - ServiceNow Orlando, Paris, Quebec, Vancouver
 
 - While the mid-server is an outbound connection from on-prem to the customer’s ServiceNow Instance, it subscribes to the “ECC Queue” allowing for bidirectional communication between an on-prem AAP and ServiceNow. Because it is polling, there can be a delay between the initiation of an action and the mid-server processing the request.
