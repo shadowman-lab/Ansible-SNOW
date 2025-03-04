@@ -415,8 +415,6 @@ Note: The ServiceNow user MUST be able to access the ServiceNow API (check if th
 
 Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click Authorize. You can utilize a System Administrator or a Normal User as this user. If you are using a Normal User, ensure they have execute access on any Job Templates or Workflow Job Templates you intend to run. **Authorize**.
 
-HTTP Error 401 - Unauthorized
-
 ### Create a Catalog Item for Users
 
 #### 8)
