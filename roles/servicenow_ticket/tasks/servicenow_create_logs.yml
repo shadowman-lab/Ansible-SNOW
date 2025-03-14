@@ -4,6 +4,10 @@
 
 - name: Create an incident in ServiceNow
   servicenow.itsm.incident:
+    instance:
+      host: "{{ lookup('env', 'SN_HOST') }}"
+      password: "{{ lookup('env', 'SN_PASSWORD') }}"
+      username: "{{ lookup('env', 'SN_USERNAME') }}"
     state: new
     description: "{{ sn_description | default(omit) }}"
     short_description: "{{ incident_description }}"
