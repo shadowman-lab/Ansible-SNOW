@@ -17,3 +17,12 @@
   when:
     - ticket_number != ''
     - requestresult.record[0].sys_id is defined
+
+# Worknotes if you want to provide a summary of a large log set. <pre> specifically is used for code
+# [code]
+# <details>
+#     <summary>Click to show</summary>
+#     <pre>
+#     </pre>
+# </details>
+# [/code]
