@@ -1,0 +1,15 @@
+---
+- name: Get CPU Utilization
+  ansible.builtin.shell: top -n 1 -b > /tmp/cpu.txt
+
+- name: Update an incident in ServiceNow
+  servicenow.itsm.incident:
+    state: in_progress
+    number: "{{ ticket_number }}"
+    urgency: "{{ sn_urgency }}"
+    impact: "{{ sn_impact }}"
+    other:
+      comments: "{{ comment }}"
+    attachments:
+      - path: /tmp/cpu.txt
+        name: "CPU Utilization Results"

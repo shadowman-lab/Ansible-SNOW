@@ -1,0 +1,10 @@
+---
+- name: Create an incident in ServiceNow with Logs attached
+  hosts: "{{ vm_name | default('all')}}"
+  gather_facts: false
+
+  vars:
+    servicenow_ticket: createlogs
+
+  roles:
+    - servicenow_ticket

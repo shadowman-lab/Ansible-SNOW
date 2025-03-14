@@ -7,9 +7,17 @@
   ansible.builtin.include_tasks: servicenow_create_eda.yml
   when: servicenow_ticket == "createeda"
 
+- name: Create ticket with logs
+  ansible.builtin.include_tasks: servicenow_create_logs.yml
+  when: servicenow_ticket == "createlogs"
+
 - name: Update ticket
   ansible.builtin.include_tasks: servicenow_update.yml
   when: servicenow_ticket == "update"
+
+- name: Update ticket with logs
+  ansible.builtin.include_tasks: servicenow_update_logs.yml
+  when: servicenow_ticket == "updatelogs"
 
 - name: Close ticket
   ansible.builtin.include_tasks: servicenow_close.yml

@@ -1,0 +1,34 @@
+---
+- name: Get CPU Utilization
+  ansible.builtin.shell: top -n 1 -b > /tmp/cpu.txt
+
+- name: Create an incident in ServiceNow
+  servicenow.itsm.incident:
+    state: new
+    description: "{{ sn_description | default(omit) }}"
+    short_description: "{{ incident_description }}"
+    caller: admin
+    urgency: "{{ sn_urgency }}"
+    impact: "{{ sn_impact }}"
+    other:
+      u_operating_system: "{{ os | default(omit) }}"
+      u_ip_address: "{{ ip_addr | default(omit) }}"
+      u_vm_name: "{{ inventory_hostname | default(omit) }}"
+    attachments:
+      - path: /tmp/cpu.txt
+        name: "CPU Utilization Results"
+  register: new_incident
+
+- name: Display incident number
+  ansible.builtin.debug:
+    var: new_incident.record.number
+
+- name: Pass incident number
+  ansible.builtin.set_stats:
+    data:
+      ticket_number: "{{ new_incident.record.number }}"
+
+- name: Pass Incident Link to rest of workflow
+  ansible.builtin.set_stats:
+    data:
+      snow_incident_link: "ServiceNow Incident: {{ lookup('env', 'SN_HOST') }}nav_to.do?uri=incident.do?sysparm_query=number={{ new_incident.record.number }} "
