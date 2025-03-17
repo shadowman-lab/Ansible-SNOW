@@ -20,7 +20,7 @@
       u_vm_name: "{{ inventory_hostname | default(omit) }}"
     attachments:
       - path: /tmp/cpu.txt
-        name: "CPU Utilization Results"
+        name: CPU Utilization Results
   register: new_incident
 
 - name: Display incident number
