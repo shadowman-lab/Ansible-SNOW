@@ -16,4 +16,4 @@
       comments: "{{ comment }}"
     attachments:
       - path: /tmp/cpu.txt
-        name: "CPU Utilization Results After"
+        name: CPU Utilization Results After
