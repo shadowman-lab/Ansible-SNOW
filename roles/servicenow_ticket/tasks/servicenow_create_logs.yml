@@ -1,5 +1,5 @@
 ---
-- name: Get CPU Utilization
+- name: Get CPU Utilization  # noqa no-changed-when
   ansible.builtin.shell: top -n 1 -b > /tmp/cpu.txt
 
 - name: Create an incident in ServiceNow
