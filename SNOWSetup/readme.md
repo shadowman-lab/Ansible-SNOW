@@ -173,9 +173,9 @@ Under the HTTP Methods section at the bottom, click the blue New button. At the 
 	}
 }
 ```
-**NOTE** None of the variables are required, this is simply an example. They should match your Job Template or Workflow requirements
+**NOTE** None of the variables shown above are required, this is simply an example. They should match your Job Template or Workflow requirements
 
-**NOTE** `from_snow` is hard coded to be true; we do not want the user to change this value as this request is in fact coming from ServiceNow.
+**NOTE** `from_snow` (not a required variable) is hard coded in this example to be true; we do not want the user to change this value in the catalog request since this request is in fact coming from ServiceNow.
 
 **NOTE** For the extra variables to be received by controller, one of the following must be true for the Job Template:
 They correspond to variables in an enabled survey.
