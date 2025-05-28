@@ -304,7 +304,7 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 
 ## ServiceNow/AAP Integration Instructions using Ansible Spoke
 
-This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your automation controller from ServiceNow (a mid-server can be utilized but only basic Auth will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
+This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your automation controller from ServiceNow (a mid-server can be utilized for OAuth if on Yokohama or newer, otherwise only basic Auth will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
 
 ## Notes
 - ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3 and replace steps 6 and 7 with [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
@@ -368,7 +368,7 @@ Click the **Submit** (or **Update** if you had a previous AAP certificate) butto
 
 ### Set Up Ansible Spoke
 
-If using a MID server, skip steps 6 and 7 and perform [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
+If using a MID server and on older than Yokohama, skip steps 6 and 7 and perform [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
 
 #### 6)
 Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Click the existing "AnsibleTowerAlias" alias. In the resulting dialog window, ensure the following fields are filled in:
@@ -416,6 +416,10 @@ Select **Create and Get OAuth Token** to complete the Ansible spoke set up.  Thi
 Note: The ServiceNow user MUST be able to access the ServiceNow API (check if the user you are logged into ServiceNow with has API access)
 
 Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click Authorize. You can utilize a System Administrator or a Normal User as this user. If you are using a Normal User, ensure they have execute access on any Job Templates or Workflow Job Templates you intend to run. **Authorize**.
+
+## NOTE If you are using a Mid Server on Yokohama or newer, there is an extra step to add the Mid Server to your credential, Note: The selected MID Server must have REST capabilities:
+
+1) Navigate to **All > Connections & Credentials > Credentials**. Select your newly created credential. Under **Applies to** select the best option for your environment and your Mid servers if selecting the Specific MID servers option. Then select the box for **Connect to Auth Server via MID Server**. Under Related Links select **Get Oauth Token**. This will generate a window asking to authorize ServiceNow against your AAP instance/cluster. Click **Authorize**. This should now successfully generate a token
 
 ### Create a Catalog Item for Users
 
