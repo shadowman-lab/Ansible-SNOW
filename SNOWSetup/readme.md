@@ -405,7 +405,7 @@ Under Related Links select "Create New Connection & Credential" and enter in the
 
 Select **Create and Get OAuth Token** to complete the Ansible spoke set up.  This will generate a window asking to authorize ServiceNow against your AAP instance/cluster. Click **Authorize**.
 
-## NOTE In AAP 2.5 this will fail with an HTTP Error 401 - Unauthorized Error because of an API Scipt auto applied by ServiceNow. To fix this:
+## NOTE In AAP 2.5 this will fail with an HTTP Error 401 - Unauthorized Error because of an API Script auto applied by ServiceNow. To fix this:
 
 1) Go to **System OAuth-->Application Registry**. Select the Application Registry you just created. Delete the OAuth API Script field. Click **Update** at the top.
 
