@@ -844,22 +844,14 @@ Congratulations! You can now have AAP reach out to SNOW to query and update reco
 
   tasks:
 
-  - name: Retrieve catalog request sysid
-    servicenow.itsm.api_info:
-      resource: sc_request
-      sysparm_query: numberSTARTSWITH{{ ticket_number }}
-    register: requestresult
-    when: ticket_number != ''
-
   - name: Update a catalog work notes and state in ServiceNow
-    servicenow.itsm.api:
-      action: patch
-      resource: sc_request
-      sys_id: "{{ requestresult.record[0].sys_id }}"
-      data:
-        request_state: "{{ request_state | default(omit) }}"
-        work_notes: "{{ work_notes }}"
-    when: ticket_number != ''
+    servicenow.itsm.catalog_request:
+      number: "{{ ticket_number }}"
+      request_state: "{{ request_state | default(omit) }}"
+      work_notes: "{{ work_notes }}"
+      state: present
+    when:
+      - ticket_number != ''
 ```
 
 ## Have AAP use ServiceNow as an inventory source
