@@ -7,6 +7,8 @@
 
 [ServiceNow/AAP Integration Instructions using Event-Driven Ansible Notification Service](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
 
+[ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
+
 [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
 
 [Have AAP reach out to ServiceNow](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#have-aap-reach-out-to-servicenow)
@@ -680,6 +682,162 @@ Navigate to Event-Driven Ansible Controller and select **Rule Audit** on AAP 2.4
 
 <img src="images/eda_json.png" alt="Event-Driven Ansible Controller JSON" title="Event-Driven Ansible Controller JSON" width="1000" />
 
+
+## ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin
+
+This walkthrough will leverage the new servicenow.itsm.records Event-Driven Ansible source plugin. This walkthrough assumes you have installed servicenow.itsm version 2.12.0 or newer in a Decision Environment. Below is an example definition
+
+```
+---
+version: 3
+
+dependencies:
+  galaxy:
+    collections:
+      - name: servicenow.itsm
+      - name: ansible.eda
+  system:
+    - pkgconf-pkg-config [platform:rpm]
+    - systemd-devel [platform:rpm]
+    - gcc [platform:rpm]
+    - python3.11-devel [platform:rpm]
+
+options:
+  package_manager_path: /usr/bin/microdnf
+
+images:
+  base_image:
+    name: registry.redhat.io/ansible-automation-platform-25/de-minimal-rhel8:latest
+```
+
+### Preparing AAP
+
+#### 1) Create custom credential type
+In AAP, navigate to **Automation Decisions -> Infrastructure -> Credential Types** on the left side of the screen. Click the **Create credential type** button on the top, which will present you with a New Credential Type dialog screen. Fill in the following fields:
+
+| Parameter | Value |
+|-----|-----|
+| Name  |  `ServiceNow ITSM Credential`  |
+| Description | Description of your credential type |
+
+Input Configuration
+
+```
+fields:
+  - id: instance
+    type: string
+    label: Instance
+  - id: username
+    type: string
+    label: Username
+  - id: password
+    type: string
+    label: Password
+    secret: true
+required:
+  - instance
+  - username
+  - password
+```
+
+Injector Configuration
+
+
+```
+env:
+  SN_HOST: '{{instance}}'
+  SN_PASSWORD: '{{password}}'
+  SN_USERNAME: '{{username}}'
+```
+
+#### 2) Create your ServiceNow Credential
+
+In AAP, navigate to **Automation Decisions -> Infrastructure -> Credentials** on the left side of the screen. Click the **Create credential** button on the top, which will present you with a New Credential dialog screen. Fill in the following fields:
+
+
+| Parameter | Value |
+|-----|-----|
+| Name | `ServiceNow ITSM Credential` |
+| Description | Description of your credential |
+| Organization |  `Default` |
+| Credential Type | `ServiceNow ITSM Credential` |
+| Instance | `<snow_instance_id> from URL including .service-now.com` |
+| Username | `SNOW Username` |
+| Password | `SNOW Password` |
+
+#### 3)
+Now we will create a basic rulebook in order to display the information pulled from ServiceNow. Push this rulebook to a Git repository (ensure it is in a folder called rulebooks from the root of the project). The rulebook is where you will decide what events to monitor for and what actions to take (such as calling an existing Job Template or Workflow Job Template in automation controller). This example rulebook will pull from the sc_request table. We are not including connection information because we will be using the previously created credential.
+
+```
+---
+- name: Generic new poll for new records in ServiceNow
+  hosts: all
+  sources:
+    - name: Watch for any updated table
+      servicenow.itsm.records:
+        table: sc_request
+        interval: 5
+
+  rules:
+
+    - name: New record created and debug
+      condition: event.sys_id is defined
+      action:
+        debug:
+```
+A more detailed rulebook example including using variables for the table and interval as well as calling a Job Template and Workflow Job Template. I have set execution_strategy to parallel to immediately handle any table changes from ServiceNow without waiting for previous jobs to finish
+```
+---
+- name: Poll for new records in ServiceNow
+  hosts: all
+  execution_strategy: parallel
+  sources:
+    - name: Watch for updated table
+      servicenow.itsm.records:
+        table: "{{ servicenow_table }}"
+        interval: "{{ servicenow_interval }}"
+
+  rules:
+
+    - name: Enrich new REQ received from Service Catalog
+      condition: event.sys_class_name == "sc_request" and event.sys_mod_count == "0"
+      action:
+        run_job_template:
+          name: "EDA Enrich ServiceNow REQ"
+          organization: Infrastructure
+          post_events: true
+          job_args:
+            extra_vars:
+              req_sys_id: "{{ event.sys_id }}"
+              req_number: "{{ event.number }}"
+
+    - name: New Multi Provision VM Request
+      condition: event.enriched_event.ritm_details is selectattr('cat_item.display_value', '==', "AAP EDA Multi Provision w/ Citrix")
+      action:
+        run_workflow_template:
+          name: "EDA Multi Hypervisor Create and Config VM, Deploy Web App with Failure Paths Citrix"
+          organization: "Infrastructure"
+          job_args:
+            extra_vars:
+              vm_name: "{{ event.enriched_event.ritm_details[0].variables | selectattr('name', 'equalto', 'vm_name') | map(attribute='value') | join(',') }}"
+              owner: "{{ event.user }}"
+              env: "{{ event.enriched_event.ritm_details[0].variables | selectattr('name', 'equalto', 'env') | map(attribute='value') | join(',') }}"
+              ticket_number: "{{ event.original_event }}"
+              operating_system: "{{ event.enriched_event.ritm_details[0].variables | selectattr('name', 'equalto', 'operating_system') | map(attribute='value') | join(',') }}"
+              shadowman_provision_hypervisor: "{{ event.enriched_event.ritm_details[0].variables | selectattr('name', 'equalto', 'shadowman_provision_hypervisor') | map(attribute='value') | join(',') }}"
+```
+
+#### 4)
+On AAP 2.5 and newer, login to the Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
+
+Now we will create a Credential for the Automation Platform (if you have not already done so) so Job and Workflow Templates can be launched. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Red Hat Ansible Automation Plaform** as the Credential Type. Enter in host `https://<unified_ui_URL>/api/controller/`, Username that exists in the platform and Password. Click **Create credential at the bottom**
+
+Now we will create the Rulebook Activation. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential and ServiceNow ITSM Credential you previously created. Select your Decision environment (one that contains the servicenow.itsm collection). If you are using variables (such as for servicenow_table), add them into the Variables section at the bottom. Click **Create rulebook activation**.
+
+#### 5)
+To test the configuration and see the output provided by ServiceNow, you will want to create an entry in the table you chose to monitor. If monitoring the sc_request table, use the service catalog to make a request.
+
+After doing so, navigate to **Automation Decisions -> Rule Audit** on AAP 2.5. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on the name to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
 
 ## ServiceNow Basic Auth Connection Configuration
 
