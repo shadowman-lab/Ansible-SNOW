@@ -7,7 +7,7 @@
 
 [ServiceNow/AAP Integration Instructions using Event-Driven Ansible Notification Service](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
 
-[ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
+[ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-source-plugin)
 
 [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
 
