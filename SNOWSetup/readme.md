@@ -754,6 +754,8 @@ env:
 
 In AAP, navigate to **Automation Decisions -> Infrastructure -> Credentials** on the left side of the screen. Click the **Create credential** button on the top, which will present you with a New Credential dialog screen. Fill in the following fields:
 
+## Notes
+The user in ServiceNow will need to have access to the tables you intend to monitor. Check your user access within ServiceNow to ensure the user you enter below has access.
 
 | Parameter | Value |
 |-----|-----|
