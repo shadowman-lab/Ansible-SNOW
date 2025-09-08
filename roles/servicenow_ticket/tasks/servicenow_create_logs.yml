@@ -1,5 +1,5 @@
 ---
-- name: Get CPU Utilization  # noqa no-changed-when
+- name: Get CPU Utilization # noqa no-changed-when
   ansible.builtin.shell: top -n 1 -b > /tmp/cpu.txt
 
 - name: Create an incident in ServiceNow
@@ -20,7 +20,7 @@
       u_vm_name: "{{ inventory_hostname | default(omit) }}"
     attachments:
       - path: /tmp/cpu.txt
-        name: "CPU Utilization Results"
+        name: CPU Utilization Results
   register: new_incident
 
 - name: Display incident number

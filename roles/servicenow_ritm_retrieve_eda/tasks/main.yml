@@ -1,5 +1,4 @@
 ---
-
 - name: Retrieve RITM details with retries
   servicenow.itsm.api_info:
     resource: sc_req_item
@@ -42,7 +41,7 @@
 - name: Retrieve variable details in one query
   servicenow.itsm.api_info:
     resource: sc_item_option
-    sysparm_query: "sys_idIN{{ variable_mappings.record | map(attribute='sc_item_option.value') | join(',') }}"
+    sysparm_query: sys_idIN{{ variable_mappings.record | map(attribute='sc_item_option.value') | join(',') }}
     columns: [item_option_new, value, sys_id]
   register: variable_details
   when: variable_mappings.record | default([]) | length > 0
@@ -50,7 +49,7 @@
 - name: Retrieve variable names using item_option_new IDs
   servicenow.itsm.api_info:
     resource: item_option_new
-    sysparm_query: "sys_idIN{{ variable_details.record | map(attribute='item_option_new.value') | join(',') }}"
+    sysparm_query: sys_idIN{{ variable_details.record | map(attribute='item_option_new.value') | join(',') }}
     columns: [sys_id, name]
   register: variable_names
   when: variable_details.record | default([]) | length > 0
