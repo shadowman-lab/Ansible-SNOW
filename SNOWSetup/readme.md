@@ -21,7 +21,7 @@
 - These instructions assume that there is no MID-Server for ServiceNow, and that the ServiceNow instance and AAP can talk to each other directly over the public internet.
 - This has been tested with:
   - Ansible Tower 3.6, 3.7, 3.8, AAP 2.0, 2.1, 2.2, 2.3, 2.4, 2.5
-  - ServiceNow Orlando, Paris, Quebec, Vancouver
+  - ServiceNow Orlando, Paris, Quebec, Vancouver, Yokohama
 
 - While the mid-server is an outbound connection from on-prem to the customer’s ServiceNow Instance, it subscribes to the “ECC Queue” allowing for bidirectional communication between an on-prem AAP and ServiceNow. Because it is polling, there can be a delay between the initiation of an action and the mid-server processing the request.
 
@@ -418,6 +418,8 @@ Select **Create and Get OAuth Token** to complete the Ansible spoke set up.  Thi
 Note: The ServiceNow user MUST be able to access the ServiceNow API (check if the user you are logged into ServiceNow with has API access)
 
 Note: If you wish to have AAP use a specific user when reaching out from ServiceNow (such as a dedicated servicenow user) ensure you are logged in as that user when you click Authorize. You can utilize a System Administrator or a Normal User as this user. If you are using a Normal User, ensure they have execute access on any Job Templates or Workflow Job Templates you intend to run. **Authorize**.
+
+Note: If you're using MID server, make sure that it has network connection to the AAP Instance (https/443) open on the firewall. Lack of this may also result in HTTP 401 error.
 
 ## NOTE If you are using a Mid Server on Yokohama or newer, there is an extra step to add the Mid Server to your credential, Note: The selected MID Server must have REST capabilities:
 
