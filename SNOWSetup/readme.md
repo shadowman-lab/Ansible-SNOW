@@ -866,7 +866,7 @@ The system displays the message What type of Credentials would you like to creat
 
 #### 6) Navigate to All > Connections & Credentials > Connection & Credential Aliases
 
-#### 7) Open the record for Ansible.
+#### 7) Open the record for Ansible. The ID should be sn_ansible_spoke.AnsibleTowerAlias
 
 #### 8) From the Connections tab, click New.
 
