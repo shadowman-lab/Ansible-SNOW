@@ -881,7 +881,9 @@ The system displays the message What type of Credentials would you like to creat
 
 #### 10) In the Advanced MID Server Configuration tab, select the MID Server as per your requirement.
 
-#### 11) Click Submit.
+#### 11) If on AAP2.5+, in the Attributes section, Version change v2 to be controller/v2.
+
+#### 12) Click Submit.
 
 ## Have AAP reach out to ServiceNow
 
