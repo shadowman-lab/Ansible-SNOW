@@ -37,7 +37,7 @@
   until: variable_mappings.record is defined and variable_mappings.record | length > 0
   retries: 3
   delay: 5
-  ignore_errors: true
+  ignore_errors: true  # necessary to handle if a catalog item has no variables
 
 - name: Retrieve variable details in one query
   servicenow.itsm.api_info:
