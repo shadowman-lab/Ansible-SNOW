@@ -877,7 +877,7 @@ The system displays the message What type of Credentials would you like to creat
 | Name | `Name to uniquely identify the connection record. For example, enter Ansible Connection.` |
 | Credential | Credential record you created for AAP. For example, select Ansible Basic Auth Cred. |
 | Connection URL | URL of the AAP instance.|
-| Use MID server | Check the box to enable using a MID Server|
+| Use MID server | Check the box to enable using a MID Server.|
 
 #### 10) In the Advanced MID Server Configuration tab, select the MID Server as per your requirement.
 
