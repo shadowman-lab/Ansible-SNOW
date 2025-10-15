@@ -5,8 +5,6 @@
 
 [ServiceNow/AAP Integration Instructions using Ansible Spoke](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-ansible-spoke)
 
-[ServiceNow/AAP Integration Instructions using Event-Driven Ansible Notification Service](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-notification-service)
-
 [ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-source-plugin)
 
 [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
@@ -576,114 +574,6 @@ Lastly, to run this catalog item, navigate to **Self-Service-->Service Catalog**
 <img src="images/spoke_catalog.png" alt="Catalog Item" title="Catalog Item" width="1000" />
 
 Congratulations! After completing these steps, you can now use a ServiceNow Catalog Item to launch a Template in AAP using Ansible Spoke. This is ideal for allowing end users to use a front end they are familiar with in order to perform this, and other automated tasks of varying complexities. This goes a long way toward reducing the time to value for the enterprise as a whole, rather than just the teams responsible for writing the playbooks being used.
-
-## ServiceNow/AAP Integration Instructions using Event-Driven Ansible Notification Service
-
-This walkthrough assumes you are able to install applications within your ServiceNow instance. It also assumes you have the ability to reach your Event-Driven Ansible Controller from ServiceNow (a mid-server can be utilized).
-
-### Preparing ServiceNow
-
-#### 1)
-In ServiceNow, navigate to the **All** menu and select **System Applications -> All Available Applications -> All** which will navigate to the Application Manager. Search for **Event-Driven Ansible** and then click on the Store Application for Event-Driven Ansible Notification Service.
-
-<img src="images/application_manager.png" alt="Application Manager" title="Application Manager" width="1000" />
-
-On the Event-Driven Ansible Notification Service click install, select your version, Install Now, and then Click Install and let the process complete.
-
-<img src="images/eda_notification_service.png" alt="Event-Driven Ansible Notification Service" title="Event-Driven Ansible Notification Service" width="1000" />
-
-#### 2)
-After the install is complete, you need to add the EDA role to the ServiceNow user who will be performing the configuration. Navigate to the **All** menu and select **System Security -> Users and Groups -> Users**. Select a user from the list or click New to create a new user. If needed, fill in the required and possibly other fields. If necessary, set a password. To assign roles, switch to the Roles tab and click **Edit**. In the Edit Member page search the collection for the **x_rhtpp_eda.admin** role and move it to the right to appear in the roles list. In addition, assign the **itil** and **itil_admin** roles to grant the user write access to the problem, problem task, configuration item, change request, and incident tables. This user can not have the **admin** role or you will be unable to save changes to the Event-Driven Ansible Notification Properties. Click **Save** to apply the assigned roles.
-
-<img src="images/eda_user_role.png" alt="Event-Driven Ansible Role" title="Event-Driven Ansible Role" width="1000" />
-
-### Preparing AAP
-
-## Notes
-This assumes you have already set up the token for automation controller within Event-Driven Ansible controller if using AAP 2.4. If using AAP 2.5 or newer step 4 will include creating a credential to run Templates.
-
-#### 3)
-Now we will create a basic rulebook in order to display the information sent by ServiceNow. Push this rulebook to a Git repository (ensure it is in a folder called rulebooks from the root of the project). The rulebook is where you will decide what events to monitor for and what actions to take (such as calling an existing Job Template or Workflow Job Template in automation controller). This example rulebook will listen on port 5003 and debug any notifications that appear to help us see what information is sent from ServiceNow.
-```
-- name: Listen for events on a webhook from ServiceNow
-  hosts: all
-  sources:
-    - ansible.eda.webhook:
-        host: 0.0.0.0
-        port: 5003
-
-  rules:
-    - name: Output ServiceNow Information
-      condition: event.meta is defined
-      action:
-        debug:
-```
-A more detailed rulebook example with an https webhook source which would use an event stream and includes calling a Workflow Job Template
-```
----
-- name: Listen for events on a webhook from ServiceNow
-  hosts: all
-  sources:
-    - ansible.eda.webhook:
-        host: 0.0.0.0
-        port: 5003
-
-  rules:
-    - name: Respond to Node Exporter Down Incident
-      condition: event.payload.short_description  == "Prometheus Node Exporter is down"
-      action:
-        run_workflow_template:
-          name: "Automated Response Node Exporter Down"
-          organization: "Security"
-          job_args:
-            extra_vars:
-              vm_name: "{{ event.payload.u_vm_name }}"
-              ticket_number: "{{ event.payload.number }}"
-```
-
-#### 4)
-On AAP 2.4 After your rulebook has been pushed to Git, we will login to Event-Driven Ansible controller and go to Projects. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
-
-Create a Rulebook Activation by going to **Rulebook Activations** and clicking **+ Create rulebook activation**. Give it a name, select your existing Project, the rulebook you previously created, and your Decision environment (the default Decision Environment will work). Click **Create rulebook activation**.
-
-On the new page, click **History** and ensure the rulebook is successfully running. The rulebook must be running in order for the test in the next section to work (and also for EDA to receive events from ServiceNow)
-
-<img src="images/eda_controller.png" alt="Event-Driven Ansible Controller" title="Event-Driven Ansible Controller" width="1000" />
-
-On AAP 2.5 and newer, login to the Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
-
-Now we will create a Credential for the Event Stream to use. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **ServiceNow Event Stream** as the Credential Type. Then enter in a token (this can be a randomly generated token from something like Bitwarden). Click **Create credential at the bottom**
-
-Now we will create a Credential for the Automation Platform so Job and Workflow Templates can be launched. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Red Hat Ansible Automation Plaform** as the Credential Type. Enter in host `https://<unified_ui_URL>/api/controller/`, Username that exists in the platform and Password. Click **Create credential at the bottom**
-
-Now go to **Automation Decisions -> Event Streams**. Click **Create event stream** at the top. Enter in a name, select an Organization, select the event stream type of **ServiceNow Event Stream** select the Credential you created in the previous step. Then click **Create event stream**
-
-Now we will create the Rulebook Activation and attach it to the Event Stream. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Select the Gear icon next to Event Streams which will open up a new dialog box. Select your Rulebook Source (which will be the header of your rulebook) and then your Event Stream (your previously created ServiceNow Event Stream) and click **Save**. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential you previously created. Select your Decision environment (the default Decision Environment will work). Click **Create rulebook activation**.
-
-### Back to ServiceNow
-
-#### 5)
-Now we will configure the Event-Driven Ansible Notification as the ServiceNow user we just assigned permissions. Navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. In the Webhook Configurations section fill in a Webhook URL and a
-Webhook authorization token if desired. The webhook URL should the FQDN of your Event-Driven Ansible Controller server plus the port your rulebook webhook will be listening on, for example on AAP 2.4 **http://eda.shadowman.dev:5003/endpoint** with AAP2.5 you'll navigate to the Event Stream you created at **Automation Decisions -> Event Streams**, select it, and then copy the URL that appears. For example `https://<unified_ui_URL>:443/eda-event-streams/api/eda/v1/external_event_stream/574d0d17-f0b2-4bgf-93ad-g8186a03eede/post/`. If you are using a 443 endpoint you can remove the port, so for example `https://<unified_ui_URL>/eda-event-streams/api/eda/v1/external_event_stream/574d0d17-f0b2-4bgf-93ad-g8186a03eede/post/`
-
-No MID Server is needed if the Webhook URL is accessible directly from the running ServiceNow instance. Otherwise, fill in a proper MID Server name. Your Event-Driven Ansible Controller server listening to the webhook requests must be reachable by the MID Server. To validate the MID Server use the **All** menu and select **MID Servers -> Servers**. The selected MID Server must appear on the server list and its Status field must be Up and its Validated field must be Yes.
-
-Click the **Test Connectivity** button to test the connection from the running servicenow instance to the configured webhook. If successful, it will display “Webhook Connection OK”.
-
-Select what tables to monitor and when to send events to the webhook in the Tables to monitor section.
-
-Please note that all fields in a selected table will be included in the payload of the event sent to Event-Driven Ansible via the webhook. There is no filtering of what fields are excluded.
-Finally click the **OK** button to persist all the settings. These settings can be modified anytime by visiting the same properties page.
-
-<img src="images/eda_configuration.png" alt="Event-Driven Ansible Configuration" title="Event-Driven Ansible Configuration" width="1000" />
-
-#### 6)
-To test the configuration and see the output provided by ServiceNow, you can easily create a test Incident. For this test, navigate to the **All** menu and select **Event-Driven Ansible Notifications -> Properties**. Check **When Created** for the Incident table if you haven't already. Click **OK** to confirm the changes. Create a new Incident, navigate to the **All** menu and select **Incident -> Create New**. Fill in the incident information (at a minimum you need Caller and Short description) and click Submit.
-
-Navigate to Event-Driven Ansible Controller and select **Rule Audit** on AAP 2.4 or **Automation Decisions -> Rule Audit** on AAP 2.5. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on **ansible.eda.webhook** to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
-
-<img src="images/eda_json.png" alt="Event-Driven Ansible Controller JSON" title="Event-Driven Ansible Controller JSON" width="1000" />
-
 
 ## ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin
 
