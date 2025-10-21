@@ -18,7 +18,7 @@
       u_operating_system: "{{ os | default(omit) }}"
       u_ip_address: "{{ ip_addr | default(omit) }}"
       u_vm_name: "{{ inventory_hostname | default(omit) }}"
-      cmdb_ci: "{{ inventory_hostname }}"
+      cmdb_ci: "{{ inventory_hostname | default(omit) }}"
     attachments:
       - path: /tmp/cpu.txt
         name: "CPU Utilization Results"
