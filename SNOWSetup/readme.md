@@ -587,7 +587,8 @@ dependencies:
   galaxy:
     collections:
       - name: servicenow.itsm
-      - name: ansible.eda
+  python_interpreter:
+      python_path: /usr/bin/python3.11
   system:
     - pkgconf-pkg-config [platform:rpm]
     - systemd-devel [platform:rpm]
@@ -599,7 +600,7 @@ options:
 
 images:
   base_image:
-    name: registry.redhat.io/ansible-automation-platform-25/de-minimal-rhel8:latest
+    name: registry.redhat.io/ansible-automation-platform-26/de-minimal-rhel9:latest
 ```
 
 ### Preparing AAP
