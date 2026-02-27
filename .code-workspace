@@ -1,0 +1,17 @@
+{
+	"settings": {
+		"ansible.validation.enabled": true,
+		"ansible.validation.lint.enabled": true,
+        "ansible.ansible.useFullyQualifiedCollectionNames": true,
+        "ansible.executionEnvironment.image": "aap.shadowman.dev/shadowmanee:latest",
+        "ansible.executionEnvironment.enabled": true,
+        "ansible.python.interpreterPath": "/usr/bin/python3.11",
+        "files.associations": {
+            "*.yaml": "ansible",
+			"*.yml": "ansible"
+        },
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+        "files.trimTrailingWhitespace": true
+	}
+}

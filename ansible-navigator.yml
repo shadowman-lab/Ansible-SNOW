@@ -1,0 +1,13 @@
+---
+ansible-navigator:
+  app: welcome
+  execution-environment:
+    container-engine: podman
+    image: aap.shadowman.dev/shadowmanee:latest
+    pull:
+      policy: missing
+  logging:
+    level: debug
+  editor:
+    command: code-server {filename}
+    console: false
