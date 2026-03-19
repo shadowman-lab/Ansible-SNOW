@@ -722,12 +722,66 @@ A more detailed rulebook example including using variables for the table and int
               shadowman_provision_hypervisor: "{{ event.enriched_event.ritm_details[0].variables | selectattr('name', 'equalto', 'shadowman_provision_hypervisor') | map(attribute='value') | join(',') }}"
 ```
 
+**NOTE** You must Create a custom credential if you need to use a proxy. If not using a proxy skip steps 4 & 5
+
 #### 4)
-On AAP 2.5 and newer, login to the Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
+In AAP, navigate to **Automation Decisions -> Infrastructure -> Credential Types** on the left side of the screen. Click the **Create credential type** button on the top, which will present you with a Create Credential type dialog screen. Fill in the following fields:
+
+| Parameter | Value |
+|-----|-----|
+| Name  |  `ServiceNow Proxy Credential`  |
+| Description | Description of your credential type |
+
+Input Configuration
+
+```
+fields:
+  - id: http_proxy
+    type: string
+    label: HTTP Proxy
+    help_text: The HTTP Proxy server to access remote resources
+  - id: https_proxy
+    type: string
+    label: HTTPS Proxy
+    help_text: The HTTPS Proxy server to access remote resources via HTTPS
+  - id: no_proxy
+    type: string
+    label: NO Proxy
+    help_text: The comma delimited list of servers that can be accessed without going thru a Proxy
+```
+
+Injector Configuration
+
+
+```
+env:
+  NO_PROXY: '{{ no_proxy }}'
+  HTTP_PROXY: '{{ http_proxy }}'
+  HTTPS_PROXY: '{{ https_proxy }}'
+```
+
+#### 5) Create your Proxy Credential
+
+In AAP, navigate to **Automation Decisions -> Infrastructure -> Credentials** on the left side of the screen. Click the **Create credential** button on the top, which will present you with a New Credential dialog screen. Fill in the following fields:
+
+
+| Parameter | Value |
+|-----|-----|
+| Name | `ServiceNow Proxy Credential` |
+| Description | Description of your credential |
+| Organization |  `Default` |
+| Credential Type | `ServiceNow Proxy Credential` |
+| HTTP Proxy | `The HTTP Proxy server to access remote resources` |
+| HTTPS Proxy | `The HTTPS Proxy server to access remote resources via HTTPS` |
+| NO Proxy | `The comma delimited list of servers that can be accessed without going thru a Proxy this must include EDA` |
+
+
+#### 6)
+Login to the Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
 
 Now we will create a Credential for the Automation Platform (if you have not already done so) so Job and Workflow Templates can be launched. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Red Hat Ansible Automation Plaform** as the Credential Type. Enter in host `https://<unified_ui_URL>/api/controller/`, Username that exists in the platform and Password. Click **Create credential at the bottom**
 
-Now we will create the Rulebook Activation. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential and ServiceNow ITSM Credential you previously created. Select your Decision environment (one that contains the servicenow.itsm collection). If you are using variables (such as for servicenow_table), add them into the Variables section at the bottom. Click **Create rulebook activation**.
+Now we will create the Rulebook Activation. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential and ServiceNow ITSM Credential you previously created (and ServiceNow Proxy Credential if using a proxy). Select your Decision environment (one that contains the servicenow.itsm collection). If you are using variables (such as for servicenow_table), add them into the Variables section at the bottom. Click **Create rulebook activation**.
 
 #### 5)
 To test the configuration and see the output provided by ServiceNow, you will want to create an entry in the table you chose to monitor. If monitoring the sc_request table, use the service catalog to make a request.
