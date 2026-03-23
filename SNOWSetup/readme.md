@@ -577,7 +577,7 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 
 ## ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin
 
-This walkthrough will leverage the new servicenow.itsm.records Event-Driven Ansible source plugin. This walkthrough assumes you have installed servicenow.itsm version 2.12.0 or newer in a Decision Environment. Below is an example definition
+This walkthrough will leverage the new servicenow.itsm.records Event-Driven Ansible source plugin. This walkthrough assumes you have installed servicenow.itsm version 2.12.0 or newer in a Decision Environment. Below is an example definition with the newest Decision Environment that leverages Python 3.12
 
 ```
 ---
@@ -588,12 +588,12 @@ dependencies:
     collections:
       - name: servicenow.itsm
   python_interpreter:
-      python_path: /usr/bin/python3.11
+      python_path: /usr/bin/python3.12
   system:
     - pkgconf-pkg-config [platform:rpm]
     - systemd-devel [platform:rpm]
     - gcc [platform:rpm]
-    - python3.11-devel [platform:rpm]
+    - python3.12-devel [platform:rpm]
 
 options:
   package_manager_path: /usr/bin/microdnf
