@@ -677,7 +677,9 @@ Right-click inside the grey area at the top; click **Save**.
 #### 6)
 Navigate to **System Definition-->Business Rules**. Click the blue **New** button. In the resulting dialog window, enter in **Name** "SNOW EDA" and **Table** "Requested Item [sc_req_item]" be sure to check the box for **Advanced**
 
-In the When to run section, for **When** select after and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as Requested for or Item). I would highly recommend using Item, which is the name of the Catalog Item, so you could leverage Item contains AAP, and then only Catalog Items that contain the name AAP are sent to Event-Driven Ansible.
+In the When to run section, for **When** select async and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as Requested for or Item). I would highly recommend using Item, which is the name of the Catalog Item, so you could leverage Item contains AAP, and then only Catalog Items that contain the name AAP are sent to Event-Driven Ansible.
+
+**Notes** Why Async? After rules run in the same database transaction. If the transaction hasn't "committed" yet, the relationship between the RITM and the REQ might not exist in the database. Async runs just after the transaction finishes, meaning the REQ is guaranteed to be there.
 
 Click the **Advanced** tab and paste in the script section
 
@@ -702,8 +704,16 @@ Click the **Advanced** tab and paste in the script section
     }
   }
 
-  if (current.request) {
-    json["request_name"] = current.request.getValue("short_description");
+  // Lookup of the Request
+  var reqId = current.getValue('request');
+  if (reqId) {
+    var grReq = new GlideRecord('sc_request');
+    if (grReq.get(reqId)) {
+        json["request_number"] = grReq.getValue('number'); // This gets REQ001234
+    }
+  } else {
+    // If it's STILL empty, we check the Parent field (sometimes used instead of Request)
+    json["request_number"] = current.parent ? current.parent.getDisplayValue() : "NOT_FOUND";
   }
 
   for (var key in current.variables) {
