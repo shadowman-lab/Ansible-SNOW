@@ -5,6 +5,8 @@
 
 [ServiceNow/AAP Integration Instructions using Ansible Spoke](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-ansible-spoke)
 
+[ServiceNow/AAP Integration Instructions using Event-Driven Ansible and SNOW Business Rules](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-and-snow-business-rules)
+
 [ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenowaap-integration-instructions-using-event-driven-ansible-source-plugin)
 
 [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
@@ -385,6 +387,8 @@ Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Cli
 <img src="images/alias.png" alt="Connection & Credential Aliases" title="Connection & Credential Aliases" width="800" />
 
 #### 7)
+**NOTE** If you have already created a connection to AAP and need to create a second one. Go to Flow Designer -> Integrations -> Connections -> Outbound. Under AnsibleTowerAlias click **Add Connection** and follow the same steps as below.
+
 Under Related Links select "Create New Connection & Credential" and enter in the following information:
 
 | Parameter | 2.4 and older Value | 2.5 and newer Value |
@@ -559,6 +563,8 @@ Click Save and then click Activate on the top bar
 They correspond to variables in an enabled survey.
 Prompt on launch for Varibles (or ask_variables_on_launch in the API) is set to True.
 
+**NOTE** If you created more than one AAP connection and you want to use the non-default connection, click the 3 dots in the top right -> Configure connections. Then select the name of the connection you want to use and click **Update**
+
 ### Update Catalog With Newly Created Flow
 
 #### 16)
@@ -574,6 +580,211 @@ Lastly, to run this catalog item, navigate to **Self-Service-->Service Catalog**
 <img src="images/spoke_catalog.png" alt="Catalog Item" title="Catalog Item" width="1000" />
 
 Congratulations! After completing these steps, you can now use a ServiceNow Catalog Item to launch a Template in AAP using Ansible Spoke. This is ideal for allowing end users to use a front end they are familiar with in order to perform this, and other automated tasks of varying complexities. This goes a long way toward reducing the time to value for the enterprise as a whole, rather than just the teams responsible for writing the playbooks being used.
+
+## ServiceNow/AAP Integration Instructions using Event-Driven Ansible and SNOW Business Rules
+
+This walkthrough will leverage ServiceNow Rest Messages, ServiceNow Business Rules, and Event-Driven Ansible's Event Streams. You will need outbound connectivity to AAP or the ability to use a Mid Server.
+
+#### 1)
+The Orlando release of the ServiceNow developer instance and newer does not allow for the self-signed certificate provided by AAP. We need to equip our AAP instance with a certificate from a trusted Certificate Authority. The easiest way to accomplish this is to SSH into AAP and run the Certbot ACME client in order to generate a certificate from LetsEncrypt (instructions can be found [here](https://letsencrypt.org/getting-started/)). It is important to place the contents of the root certificate + the intermediate certificate + the certificate you generate (found at `/etc/letsencrypt/live/<tower domain>/cert.pem`) at the location AAP places its self-signed certificate and key. The LetsEncrypt intermediate certificate can be found [here](https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt).
+
+Be sure to restart the nginx service on your AAP server after updating the certificate and key.
+
+#### 2)
+Moving over to ServiceNow, Navigate to **System Definition-->Certificates**. This will take you to a screen of all the certificates Service Now uses. Click on the **blue New button**, and fill in these details:
+| Parameter | Value |
+|-----|-----|
+| Name  | Descriptive name of the certificate  |
+|  Format |  `PEM` |
+|  Type |  `Trust Store Cert` |
+|  PEM Certificate |  The certificate to authenticate against AAP with. Use the certificate you just generated on your AAP server. Copy the contents of this file into the field in ServiceNow. |
+
+<img src="images/tower_cert.png" alt="AAP Certificate" title="AAP Certificate" width="1000" />
+
+Click the **Submit** button at the bottom.
+
+#### 3)
+We will create a basic rulebook in order to display the information sent by ServiceNow. Push this rulebook to a Git repository (ensure it is in a folder called rulebooks from the root of the project). The rulebook is where you will decide what events to monitor for and what actions to take (such as calling an existing Job Template or Workflow Job Template in automation controller). The port does not matter since we will be attaching this to an Event Stream. It will debug any events that appear to help us see what information is sent from ServiceNow.
+```
+- name: Listen for events on a webhook from ServiceNow
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5003
+
+  rules:
+    - name: Output ServiceNow Information
+      condition: event.meta is defined
+      action:
+        debug:
+```
+A more detailed rulebook example with a catalog item and includes calling a Job Template with a variable
+```
+---
+- name: Listen for events on a webhook from ServiceNow
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5003
+
+  rules:
+    - name: Restart Node Exporter
+      condition: event.payload.catalog_item  == "Start Prometheus Node Exporter"
+      action:
+        run_job_template:
+          name: "Start Prometheus Node Exporter"
+          organization: "Infrastructure"
+          job_args:
+            extra_vars:
+              vm_name: "{{ event.payload.virtual_machine }}"
+```
+
+#### 4)
+Login to the AAP Unified UI. Go to **Automation Decisions -> Projects**. Either sync an existing Project if you already have one or go to **+ Create Project** and provide a name and your SCM URL and click **Create Project**. Ensure the Project has succesfully synced.
+
+Now we will create a Credential for the Event Stream to use. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Token Event Stream** as the Credential Type. Then enter in a token (this can be a randomly generated token from something like Bitwarden). Save this token as you will need it in step 5. Click **Create credential at the bottom**
+
+Now we will create a Credential for the Automation Platform so Job and Workflow Templates can be launched. Go to **Automation Decisions -> Infrastructure -> Credentials**. Select **Create credential**. Enter a name, select an organization and select **Red Hat Ansible Automation Plaform** as the Credential Type. Enter in host `https://<unified_ui_URL>/api/controller/`, Username that exists in the platform and Password. Click **Create credential at the bottom**
+
+Now go to **Automation Decisions -> Event Streams**. Click **Create event stream** at the top. Enter in a name, select an Organization, select the event stream type of **Token Event Stream** select the Credential you created in the previous step. Then click **Create event stream**
+
+When the page reloads, you'll see a URL section. Copy this URL, you will need it when we create the Rest Message in ServiceNow.
+
+Now we will create the Rulebook Activation and attach it to the Event Stream. Go to **Automation Decisions -> Rulebook Activations** Select **Create rulebook activation**. Enter a name and Organization. Select the Project you previously created and then your ServiceNow rulebook. Select the Gear icon next to Event Streams which will open up a new dialog box. Select your Rulebook Source (which will be the header of your rulebook) and then your Event Stream (your previously created Token Event Stream) and click **Save**. Click the magnifying glass next to Credential and select the Red Hat Ansible Automation Platform credential you previously created. Select your Decision environment (the default Decision Environment will work). Click **Create rulebook activation**.
+
+#### 5)
+In ServiceNow, Navigate to **System Web Services-->Outbound-->REST Messages**. Click the blue **New** button. In the resulting dialog window, fill in the following fields:
+
+
+| Parameter | Value |
+|-----|-----|
+| Name  | `SNOW EDA`  |
+|  Endpoint |  The Event Stream url you copied from before |
+|  Authentication Type |  `No Authentication` |
+
+Right-click inside the grey area at the top; click **Save**.
+
+In the HTTP Methods at the bottom, select **Default GET**
+
+Change the name to **SNOW EDA** and change HTTP method to **Post**
+
+Click the **HTTP Request** Tab, in the HTTP Headers section, double click on **Insert a new row**, paste "Authorization" and click the green check mark. Double click in the **Value** section, paste the token you generated earlier and click the green check mark. If a Mid Server is required to reach AAP, click the magnifying glass next to **Use MID Server** and select the correct server.
+
+Right-click inside the grey area at the top; click **Save**.
+
+#### 6)
+Navigate to **System Definition-->Business Rules**. Click the blue **New** button. In the resulting dialog window, enter in **Name** "SNOW EDA" and **Table** "Requested Item [sc_req_item]" be sure to check the box for **Advanced**
+
+In the When to run section, for **When** select after and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as Requested for or Catalog). I would highly recommend using Catalog, so then all AAP jobs can be initiated from a single Catalog to ensure only certain jobs are sent to Event-Driven Ansible.
+
+Click the **Advanced** tab and paste in the script section
+
+**Note** the REST_MESSAGE_NAME must match the name you created earlier
+
+```
+(function executeRule(current, previous) {
+  var REST_MESSAGE_NAME = "SNOW EDA";
+  var EVENT_NAME = "SERVICE_CATALOG";
+
+  var r = new sn_ws.RESTMessageV2(REST_MESSAGE_NAME, "POST");
+
+  var json = { event: EVENT_NAME };
+
+  if (current.cat_item) {
+    json["catalog_item"] = current.cat_item.getDisplayValue();
+  }
+
+  if (current.opened_by) {
+    var requester = current.opened_by.getRefRecord();
+    if (requester.isValidRecord()) {
+      json["requester"] = requester.getValue("email");
+    }
+  }
+
+  if (current.request) {
+    json["request_name"] = current.request.getValue("short_description");
+  }
+
+  for (var key in current.variables) {
+    if (current.variables.hasOwnProperty(key)) {
+      var variable = current.variables[key];
+      json[key] =
+        variable.getDisplayValue() != null
+          ? variable.getDisplayValue()
+          : JSON.parse(String(variable));
+    }
+  }
+
+  var jsonString = JSON.stringify(json);
+  r.setRequestBody(jsonString);
+  r.setTimeout(10000);
+  r.execute();
+})(current, previous);
+```
+
+This will take all variables from the service catalog item and push them to EDA.
+
+#### 7)
+Navigate to **Service Catalog-->Catalog Definitions->Maintain Items**. Click the blue **New** button on the resulting item list. In the resulting dialog box, fill in the following fields:
+
+| Parameter | Value |
+|-----|-----|
+| Name | `Provision Cloud Webservers with Users` |
+| Catalog | The catalog that this item should be a part of |
+| Category | Required if you wish users to be able to search for this item |
+
+
+Click the Submit Button. You’ve now created a new catalog item!
+
+#### 8)
+Navigate back to the Catalog Item settings, and at the bottom, click the **New** button under the variables tab. In the window that results, populate the question you want to present to the user, and the variable name. You can also put a default value under the Default Value Tab. If you select a variable type of `Multiple Choice`, after submitting the changes you can add options under the ***Question Choices*** section at the bottom of the Variable settings page.
+
+<img src="images/catalog_vars.png" alt="Catalog Vars" title="Catalog Vars" width="1000" />
+
+Here are the fields required for each variable in this demo:
+##### cloud_provider
+| Parameter | Value |
+|-----|-----|
+| Type | `Multiple Choice` |
+| Question | `Which Cloud provider to provision into?` |
+| Name | `cloud_provider` |
+| Default value | `aws` |
+
+###### variable options
+| Text | Value | Order |
+|-----|-----|-----|
+| `Amazon Web Services` | `aws` | `100` |
+| Google Cloud Platform | `gcp` | `200` |
+
+##### num_instances
+| Parameter | Value |
+|-----|-----|
+| Type | `Single Line Text` |
+| Question | `How many instances should be spun up? (Any value from 1 through 10)` |
+| Name | `num_instances` |
+| Default value | `3` |
+
+##### instance_size
+| Parameter | Value |
+|-----|-----|
+| Type | `Multiple Choice` |
+| Question | `What size instance should be selected?` |
+| Name | `instance_size` |
+| Default value | `small` |
+
+###### variable options
+| Text | Value | Order |
+|-----|-----|-----|
+| `small` | `small` | `100` |
+| `medium` | `medium` |  `200` |
+| `large` | `large` |  `300` |
+
+#### 9)
+Lastly, to run this catalog item, navigate to **Self-Service-->Homepage** and search for the catalog item you just created. Once found, click the **order now** button. You can see the results page pop up in ServiceNow, and you can confirm that the event is received in AAP by going to **Automation Decisions -> Rule Audit**. Click the new event that was created and then click the **Events** tab. Click the listener name and you will see all of the variables that came from the catalog item.
+
+Congratulations! After completing these steps, you can now update your rulebook to respond to any Catalog Item and call the appropriate Job Template/Workflow within AAP. All that's required now is creating a new Catalog Item for each request, and then updating your rulebook to process the item, any variables, and call the correct template within AAP. This is ideal for allowing end users to use a front end they are familiar with in order to perform this, and other automated tasks of varying complexities. This goes a long way toward reducing the time to value for the enterprise as a whole, rather than just the teams responsible for writing the playbooks being used.
 
 ## ServiceNow/AAP Integration Instructions using Event-Driven Ansible Source Plugin
 
