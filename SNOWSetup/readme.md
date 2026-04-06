@@ -731,7 +731,7 @@ Navigate to **Service Catalog-->Catalog Definitions->Maintain Items**. Click the
 
 | Parameter | Value |
 |-----|-----|
-| Name | `Provision Cloud Webservers with Users` |
+| Name | The name you want for your catalog |
 | Catalog | The catalog that this item should be a part of |
 | Category | Required if you wish users to be able to search for this item |
 
@@ -743,7 +743,7 @@ Navigate back to the Catalog Item settings, and at the bottom, click the **New**
 
 <img src="images/catalog_vars.png" alt="Catalog Vars" title="Catalog Vars" width="1000" />
 
-Here are the fields required for each variable in this demo:
+Here are some examples:
 ##### cloud_provider
 | Parameter | Value |
 |-----|-----|
