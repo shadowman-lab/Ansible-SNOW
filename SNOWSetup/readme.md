@@ -668,7 +668,7 @@ Right-click inside the grey area at the top; click **Save**.
 
 In the HTTP Methods at the bottom, select **Default GET**
 
-Change the name to **SNOW EDA** and change HTTP method to **Post**
+Change the name to **POST** and change HTTP method to **Post**
 
 Click the **HTTP Request** Tab, in the HTTP Headers section, double click on **Insert a new row**, paste "Authorization" and click the green check mark. Double click in the **Value** section, paste the token you generated earlier and click the green check mark. If a Mid Server is required to reach AAP, click the magnifying glass next to **Use MID Server** and select the correct server.
 
@@ -681,14 +681,13 @@ In the When to run section, for **When** select after and check the box for **In
 
 Click the **Advanced** tab and paste in the script section
 
-**Note** the REST_MESSAGE_NAME must match the name you created earlier
+**Note** the first line must match your Rest Message name and your HTTP Method name that you created earlier
 
 ```
 (function executeRule(current, previous) {
-  var REST_MESSAGE_NAME = "SNOW EDA";
-  var EVENT_NAME = "SERVICE_CATALOG";
+  var r = new sn_ws.RESTMessageV2("SNOW EDA", "POST");
 
-  var r = new sn_ws.RESTMessageV2(REST_MESSAGE_NAME, "POST");
+  var EVENT_NAME = "SERVICE_CATALOG";
 
   var json = { event: EVENT_NAME };
 
