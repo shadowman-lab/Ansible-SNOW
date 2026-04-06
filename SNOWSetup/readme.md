@@ -677,7 +677,7 @@ Right-click inside the grey area at the top; click **Save**.
 #### 6)
 Navigate to **System Definition-->Business Rules**. Click the blue **New** button. In the resulting dialog window, enter in **Name** "SNOW EDA" and **Table** "Requested Item [sc_req_item]" be sure to check the box for **Advanced**
 
-In the When to run section, for **When** select after and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as Requested for or Catalog). I would highly recommend using Catalog, so then all AAP jobs can be initiated from a single Catalog to ensure only certain jobs are sent to Event-Driven Ansible.
+In the When to run section, for **When** select after and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as Requested for or Item). I would highly recommend using Item, which is the name of the Catalog Item, so you could leverage Item contains AAP, and then only Catalog Items that contain the name AAP are sent to Event-Driven Ansible.
 
 Click the **Advanced** tab and paste in the script section
 
