@@ -583,7 +583,7 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 
 ## ServiceNow/AAP Integration Instructions using Event-Driven Ansible and SNOW Business Rules
 
-This walkthrough will leverage ServiceNow Rest Messages, ServiceNow Business Rules, and Event-Driven Ansible's Event Streams. You will need outbound connectivity to AAP or the ability to use a Mid Server.
+This walkthrough will leverage ServiceNow Rest Messages, ServiceNow Business Rules, and Event-Driven Ansible's Event Streams. You will need outbound connectivity to AAP or the ability to use a Mid Server. The advantage of this method is that it only requires one Rest Message and one Business Rule to handle all Catalog Items (rather than creating a flow/workflow per Catalog Item). After the inital setup, all that's required is creating a new Catalog Item for each request and updating the Ansible Rulebook.
 
 #### 1)
 The Orlando release of the ServiceNow developer instance and newer does not allow for the self-signed certificate provided by AAP. We need to equip our AAP instance with a certificate from a trusted Certificate Authority. The easiest way to accomplish this is to SSH into AAP and run the Certbot ACME client in order to generate a certificate from LetsEncrypt (instructions can be found [here](https://letsencrypt.org/getting-started/)). It is important to place the contents of the root certificate + the intermediate certificate + the certificate you generate (found at `/etc/letsencrypt/live/<tower domain>/cert.pem`) at the location AAP places its self-signed certificate and key. The LetsEncrypt intermediate certificate can be found [here](https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt).
