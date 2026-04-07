@@ -666,6 +666,8 @@ In ServiceNow, Navigate to **System Web Services-->Outbound-->REST Messages**. C
 
 Right-click inside the grey area at the top; click **Save**.
 
+<img src="images/businessrest.png" alt="ServiceNow Rest Messages" title="ServiceNow Rest Message" width="1000" />
+
 In the HTTP Methods at the bottom, select **Default GET**
 
 Change the name to **POST** and change HTTP method to **Post**
@@ -674,10 +676,14 @@ Click the **HTTP Request** Tab, in the HTTP Headers section, double click on **I
 
 Right-click inside the grey area at the top; click **Save**.
 
+<img src="images/businessmethod.png" alt="ServiceNow HTTP Method" title="ServiceNow HTTP Method" width="1000" />
+
 #### 6)
 Navigate to **System Definition-->Business Rules**. Click the blue **New** button. In the resulting dialog window, enter in **Name** "SNOW EDA" and **Table** "Requested Item [sc_req_item]" be sure to check the box for **Advanced**
 
 In the When to run section, for **When** select **async** and check the box for **Insert**. In **Filter Conditions** select any conditions you might require (such as **Requested for** or **Item**). I would highly recommend using **Item**, which is the name of the Catalog Item, so you could leverage Item contains AAP, and then only Catalog Items that contain AAP in the name are sent to Event-Driven Ansible.
+
+<img src="images/businesswhento.png" alt="ServiceNow Business Rules When To" title="ServiceNow Business Rules When To" width="1000" />
 
 Click the **Advanced** tab and paste in the script section
 
@@ -737,6 +743,8 @@ The first line in the script below must match the Rest Message name and the HTTP
 
 This will take all variables from the service catalog item and push them to EDA.
 
+<img src="images/businessadvanced.png" alt="ServiceNow Business Rules Advanced" title="ServiceNow Business Rules Advanced" width="1000" />
+
 #### 7)
 Navigate to **Service Catalog-->Catalog Definitions->Maintain Items**. Click the blue **New** button on the resulting item list. In the resulting dialog box, fill in the following fields:
 
@@ -794,6 +802,8 @@ Here are some examples:
 
 #### 9)
 Lastly, to run this catalog item, navigate to **Self-Service-->Homepage** and search for the catalog item you just created. Once found, click the **order now** button. You can see the results page pop up in ServiceNow, and you can confirm that the event is received in AAP by going to **Automation Decisions -> Rule Audit**. Click the new event that was created and then click the **Events** tab. Click the listener name and you will see all of the variables that came from the catalog item.
+
+<img src="images/businessruleaudit.png" alt="AAP Rule Audit" title="AAP Rule Audit" width="1000" />
 
 Congratulations! After completing these steps, you can now update your rulebook to respond to any Catalog Item and call the appropriate Job Template/Workflow within AAP. All that's required now is creating a new Catalog Item for each request, and then updating your rulebook to process the item, any variables, and call the correct template within AAP. This is ideal for allowing end users to use a front end they are familiar with in order to perform this, and other automated tasks of varying complexities. This goes a long way toward reducing the time to value for the enterprise as a whole, rather than just the teams responsible for writing the playbooks being used.
 
