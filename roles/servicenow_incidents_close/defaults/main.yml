@@ -7,7 +7,7 @@ open_states:
   - "3"  # On Hold
   - "6"  # Resolved
 
-close_state: "7"  # Closed
+close_state: closed
 
 # Closure details
 close_code: "Solved (Permanently)"
