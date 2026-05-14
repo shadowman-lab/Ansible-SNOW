@@ -1,0 +1,14 @@
+---
+# ServiceNow state codes
+# 1 = New, 2 = In Progress, 3 = On Hold, 6 = Resolved, 7 = Closed
+open_states:
+  - "1"  # New
+  - "2"  # In Progress
+  - "3"  # On Hold
+  - "6"  # Resolved
+
+close_state: "7"  # Closed
+
+# Closure details
+close_code: "Solved (Permanently)"
+close_notes: "Incident automatically closed by Ansible automation on {{ now() }}"

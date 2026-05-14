@@ -1,0 +1,20 @@
+---
+- name: Query all open incidents from ServiceNow
+  servicenow.itsm.incident_info:
+    query:
+      - state: IN {{ open_states | join(',') }}
+  register: open_incidents
+
+- name: Close each open incident
+  servicenow.itsm.incident:
+    state: "{{ close_state }}"
+    number: "{{ item.number }}"
+    close_code: "{{ close_code }}"
+    close_notes: "{{ close_notes }}"
+    other:
+      resolved_by: "Ansible Service Account"
+      resolved_at: "{{ now() }}"
+  loop: "{{ open_incidents.records }}"
+  loop_control:
+    label: "{{ item.number }} - {{ item.short_description }}"
+  when: open_incidents.records | length > 0

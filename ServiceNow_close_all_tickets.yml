@@ -1,0 +1,7 @@
+---
+- name: Close all open ServiceNow Incidents
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - servicenow_incidents_close
