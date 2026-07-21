@@ -7,6 +7,7 @@
     state: present
   when:
     - ticket_number != ''
+    - ticket_number != 'Req121'
 
 # - name: Retrieve catalog request sysid
 #   servicenow.itsm.api_info:
