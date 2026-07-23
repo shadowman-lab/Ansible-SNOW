@@ -8,7 +8,7 @@
   when:
     - ticket_number != ''
     - ticket_number != 'Req121'
-    - ticket_number != 'INC121'
+    - ticket_number != 'noticket'
 
 # - name: Retrieve catalog request sysid
 #   servicenow.itsm.api_info:
