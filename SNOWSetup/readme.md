@@ -1047,7 +1047,7 @@ The system displays the message What type of Credentials would you like to creat
 | Applies to	 | Select whether this works for all MID servers or only select ones and then pick the MID Servers |
 | API Key Header | `Authorization` |
 | API Key Prefix | `Bearer` |
-| API Key | The token generated in AAP |
+| API Key | The token manually generated in AAP for a specific user. This will also have to be replaced manually when the token expires |
 
 #### 5) Click Submit
 
