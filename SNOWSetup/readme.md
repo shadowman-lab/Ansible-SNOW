@@ -306,10 +306,10 @@ Congratulations! After completing these steps, you can now use a ServiceNow Cata
 
 ## ServiceNow/AAP Integration Instructions using Ansible Spoke
 
-This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your Ansible Automation Platform from ServiceNow (a mid-server can be utilized for OAuth if on Yokohama or newer, otherwise only basic Auth will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
+This walkthrough assumes you have an Integration Hub Standard/Professional subscription and Ansible spoke activated. It also assumes you have the ability to reach your Ansible Automation Platform from ServiceNow (a mid-server can be utilized for OAuth if on Yokohama or newer, otherwise only basic Auth/a pre-created token will work). For this example, I will be utilizing an already existing Ansible Automation Platform (AAP) workflow that patches all of my Red Hat Enterprise Linux Servers and updates a ServiceNow Catalog Request. I will also be using Ansible Automation Platform 2.2 but this integration will work in Ansible Automation Platform 1.2 and any version of 2.x as well. Ansible spoke leverages the ServiceNow Flow Designer which can be easier to use when leveraging variables and building out the API Rest message.
 
 ## Notes
-- ServiceNow MID Servers do not support OAuth, you must use basic authentication. Skip steps 1-3 and replace steps 6 and 7 with [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
+- ServiceNow MID Servers do not support OAuth2 Flow, you must use basic authentication or pre-create a token. Skip steps 1-3 and replace steps 6 and 7 with [ServiceNow Basic Auth or Access Token Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-or-token-connection-configuration)
 
 ### Preparing AAP
 
@@ -370,7 +370,7 @@ Click the **Submit** (or **Update** if you had a previous AAP certificate) butto
 
 ### Set Up Ansible Spoke
 
-If using a MID server and on older than Yokohama, skip steps 6 and 7 and perform [ServiceNow Basic Auth Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-connection-configuration)
+If using a MID server and on older than Yokohama, skip steps 6 and 7 and perform [ServiceNow Basic Auth or Access Token Connection Configuration](https://github.com/shadowman-lab/Ansible-SNOW/tree/main/SNOWSetup#servicenow-basic-auth-or-tokenconnection-configuration)
 
 #### 6)
 Navigate to **Connections & Credentials-->Connection & Credential Aliases**. Click the existing "AnsibleTowerAlias" alias. In the resulting dialog window, ensure the following fields are filled in:
@@ -1020,16 +1020,16 @@ To test the configuration and see the output provided by ServiceNow, you will wa
 
 After doing so, navigate to **Automation Decisions -> Rule Audit** on AAP 2.5. You should see a new Rule that has been triggered. Select the name. Go to **Events** and click on the name to see the full json payload that was received by EDA. This is what you can use to create the conditions for your rulebook in the future. You can now utilize the Event-Driven Ansible Notification Service.
 
-## ServiceNow Basic Auth Connection Configuration
+## ServiceNow Basic Auth or Token Connection Configuration
 
 #### 1) Navigate to All > Connections & Credentials > Credentials.
 
 #### 2) Click New.
 The system displays the message What type of Credentials would you like to create?
 
-#### 3) Select Basic Auth Credentials.
+#### 3) Select Basic Auth Credentials or API Key Credentials
 
-#### 4) On the form, fill these values
+#### 4) On the form, fill these values for Basic Auth
 
 | Parameter | Value |
 |-----|-----|
@@ -1038,6 +1038,16 @@ The system displays the message What type of Credentials would you like to creat
 | Password | Password to log in to AAP. |
 | Active | Option to actively use the credential record. |
 | Order | Order to apply this credential. For example, enter 100. |
+
+##### Fill these values for API Key Credential
+
+| Parameter | Value |
+|-----|-----|
+| Name | `Name to uniquely identify the record. For example, enter Ansible API Token` |
+| Applies to	 | Select whether this works for all MID servers or only select ones and then pick the MID Servers |
+| API Key Header | `Authorization` |
+| API Key Prefix | `Bearer` |
+| API Key | The token generated in AAP |
 
 #### 5) Click Submit
 
