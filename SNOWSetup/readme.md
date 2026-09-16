@@ -1045,6 +1045,8 @@ The system displays the message What type of Credentials would you like to creat
 |-----|-----|
 | Name | `Name to uniquely identify the record. For example, enter Ansible API Token` |
 | Applies to	 | Select whether this works for all MID servers or only select ones and then pick the MID Servers |
+| Active | Option to actively use the credential record. |
+| Order | Order to apply this credential. For example, enter 100. |
 | API Key Header | `Authorization` |
 | API Key Prefix | `Bearer` |
 | API Key | The token manually generated in AAP for a specific user. This will also have to be replaced manually when the token expires |
@@ -1062,6 +1064,7 @@ The system displays the message What type of Credentials would you like to creat
 | Parameter | Value |
 |-----|-----|
 | Name | `Name to uniquely identify the connection record. For example, enter Ansible Connection.` |
+| Active | Option to actively use the connection record. |
 | Credential | Credential record you created for AAP. For example, select Ansible Basic Auth Cred or Ansible API Token. |
 | Connection URL | URL of the AAP instance. Must include https |
 | Use MID server | Check the box to enable using a MID Server.|
