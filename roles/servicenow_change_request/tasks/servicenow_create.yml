@@ -7,7 +7,7 @@
     short_description: Reboot Windows Server
     requested_by: admin
     other:
-      cmdb_ci: "{{ ip_addr }}"
+      cmdb_ci: "{{ ip_addr | default(omit)}}"
   delegate_to: localhost
   register: request
 
