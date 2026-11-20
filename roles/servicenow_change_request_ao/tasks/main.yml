@@ -2,7 +2,7 @@
 - name: Create a change request in ServiceNow
   servicenow.itsm.change_request:
     type: standard
-    template: Cat App Deploy to Production
+    template: Cat App Deploy to Production - 2
     short_description: "{{ cr_description }}"
     description: "{{ cr_long_description }}"
     assignment_group: CAB Approval
