@@ -1,0 +1,23 @@
+---
+- name: Create a change request in ServiceNow
+  servicenow.itsm.change_request:
+    type: normal
+    short_description: "{{ cr_description }}"
+    description: "{{ cr_long_description }}"
+    priority: high
+    risk: moderate
+    impact: low
+    state: assess
+  delegate_to: localhost
+  register: request
+
+- name: Pass along request information
+  ansible.builtin.set_stats:
+    data:
+      request: "{{ request }}"
+    per_host: false
+
+- name: Update to implement a change request in ServiceNow
+  servicenow.itsm.change_request:
+    state: implement
+    number: "{{ request.record.number }}"
