@@ -5,6 +5,7 @@
     template: Cat App Deploy to Production
     short_description: "{{ cr_description }}"
     description: "{{ cr_long_description }}"
+    assignment_group: CAB Approval
     priority: high
     risk: moderate
     impact: low
