@@ -1,13 +1,14 @@
 ---
 - name: Create a change request in ServiceNow
   servicenow.itsm.change_request:
-    type: normal
+    type: standard
+    template: Cat App Deploy to Production
     short_description: "{{ cr_description }}"
     description: "{{ cr_long_description }}"
     priority: high
     risk: moderate
     impact: low
-    state: assess
+    state: scheduled
   delegate_to: localhost
   register: request
 
