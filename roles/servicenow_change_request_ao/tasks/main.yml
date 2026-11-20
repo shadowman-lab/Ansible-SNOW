@@ -3,13 +3,13 @@
   servicenow.itsm.change_request:
     type: standard
     template: Cat App Deploy to Production - 2
-    short_description: "{{ cr_description }}"
-    description: "{{ cr_long_description }}"
     assignment_group: CAB Approval
     priority: high
     risk: moderate
     impact: low
     state: scheduled
+    other:
+      work_notes: "{{ work_notes }}"
   delegate_to: localhost
   register: request
 
